@@ -1,5 +1,7 @@
 # Resumo Workflow 
 
+
+![Fluxo Completo](./Imagens/Fluxointeiro.jpg)
 ## 🔄 4 Partes
 
 ### **Automação 1: Raspagem de Dados**
