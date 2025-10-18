@@ -1,6 +1,6 @@
-# Resumo do Sistema - Workflow de Análise de Vídeos YouTube
+# Resumo Workflow 
 
-## 🔄 As 4 Automações
+## 🔄 4 Partes
 
 ### **Automação 1: Raspagem de Dados**
 Faz raspagem de vídeos do YouTube usando um actor do Apify. Recebe nicho, quantidade e filtro via formulário web, aguarda 10 minutos o processamento e salva ~50 vídeos com métricas calculadas (engagementRate, outlierScore, viewsPerDay, etc.) na planilha DADOSBRUTOS.
