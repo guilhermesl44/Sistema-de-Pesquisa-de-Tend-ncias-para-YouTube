@@ -1,5 +1,7 @@
 # 🎯 Parte 2 — Análise de Thumbnails & Padrões Visuais
 
+![Fluxo Completo](./Imagens/automacao2pt2.jpg)
+
 ## 📌 Objetivo
 
 Esta parte do workflow lê **exatamente os 50 primeiros registros** da aba **“Dados ordenados”**, verifica se cada linha **já possui descrição de thumbnail**, gera a **descrição técnica** (quando ausente) e por fim **consolida padrões visuais** a partir dessas descrições, salvando o resultado na aba **“IDentificação de padrões”** (linha 2). 
