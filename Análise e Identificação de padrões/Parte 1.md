@@ -1,10 +1,4 @@
-Perfeito — analisei o fluxo completo de **“parte2 - automação 1”** e entendi sua lógica com precisão.
-Abaixo está a **documentação pronta no mesmo padrão da Parte 1**, com estrutura, linguagem e ícones idênticos, sem adições nem invenções.
-As áreas de **prompt** foram mantidas em branco para você colar manualmente.
-
----
-
-# Parte 2 – Automação 1: Identificação de Padrões de Performance de Títulos
+# Parte 1: Identificação de Padrões de Performance de Títulos
 
 ## 📋 Visão Geral
 
@@ -24,7 +18,7 @@ O objetivo é **identificar padrões estruturais, gatilhos emocionais e deficiê
 
 ---
 
-## 📦 Sequências da Parte 2
+## 📦 Sequências da Análise e Identificação de padrões
 
 > A automação se divide em **4 partes lógicas**, representando as sub-etapas da análise.
 
@@ -87,10 +81,9 @@ return $input.all().slice(0, limit);
 **Tipo:** `@n8n/n8n-nodes-langchain.agent`
 **Função:** Analisa os títulos de melhor performance com base no prompt de diagnóstico positivo.
 
-> **Prompt usado:**  
-> 
-> <pre>
-## System
+📍 **Prompt:**
+
+```
 ## System
 Você é um **Especialista em Engenharia de Conteúdo, Psicologia do Click e Modelagem de Estruturas Virais**.  
 Seu papel é analisar **títulos de vídeos de alta performance** e **identificar padrões replicáveis** com base em evidências observáveis.  
@@ -142,7 +135,9 @@ Gerar um **raio-x completo dos títulos vencedores**, revelando:
    - Outros padrões menores entram em `oportunidades_fracas`
 6. **Selecione as 3 melhores estruturas** (por outlierScore médio)
 7. **Gere o insight geral**, resumindo os achados de maior valor.
-</pre>
+```
+
+---
 
 >
 > **Como o prompt limita o retorno:**
@@ -192,11 +187,124 @@ return $input.all().slice(0, limit);
 **Tipo:** `@n8n/n8n-nodes-langchain.agent`
 **Função:** Executa a análise dos títulos de pior performance.
 
-> **Área para colar o prompt usado:**
->
-> ```
-> [COLE AQUI O PROMPT NEGATIVO]
-> ```
+📍 **Prompt:**
+
+```
+## System
+Você é um **Especialista em Engenharia de Conteúdo e Psicologia do Click**, especializado em **diagnosticar títulos ineficazes**.  
+Seu papel é identificar **erros estruturais**, **ausência de gatilhos** e **padrões que reduzem o desempenho** com base em evidências observáveis.  
+Você trabalha **apenas com dados reais**, sem inferir métricas externas (CTR, watchtime etc.).  
+Sua resposta deve ser **JSON válido e parseável**.
+
+---
+
+## User
+Analise os **quantidade títulos de pior performance** do nicho: `nicho`.
+
+### 📋 Dados recebidos
+Cada item contém:
+- **ID**  
+- **Título** (ou "Titulo ")  
+- **outlierScore** (métrica de destaque)  
+- **Score Final** (0–100)  
+- **Flags** (metadados de oportunidade)
+
+---
+
+## 🎯 Objetivo
+Gerar um **raio-x dos erros recorrentes** nos títulos de baixa performance, revelando:
+1. **Estruturas ineficazes ou genéricas**
+2. **Ausência de gatilhos e power words**
+3. **Problemas de formato e clareza**
+4. **Padrões linguísticos associados a baixo desempenho**
+5. **Oportunidades de reescrita e ajuste estrutural**
+
+---
+
+## Processo
+
+1. **Selecione os títulos de pior performance**
+   - Use os *quantidade* com menor outlierScore.
+2. **Analise cada título** para identificar:
+   - Falta de gatilho, número, promessa ou especificador.
+   - Frases genéricas, vagas ou sem diferencial emocional.
+   - Estruturas extensas, confusas ou desbalanceadas.
+   - Uso excessivo de palavras fracas (ex: “coisa”, “importante”, “veja”).
+   - Falta de foco (mistura de múltiplas ideias).
+3. **Agrupe títulos por padrão negativo:**
+   - Ex: “Sem gatilho + promessa vaga” ou “Informativo genérico sem emoção”.
+4. **Calcule estatísticas globais:**
+   - Comprimento médio em caracteres e palavras.
+   - Frequência de ausência de elementos (sem número, sem gatilho, etc.).
+   - Ocorrência de power words fracas.
+5. **Classifique os padrões:**
+   - Apenas inclua padrões negativos com ≥ 6 ocorrências (≥ 12%).
+   - Os menos recorrentes entram em `anomalias`.
+6. **Gere recomendações curtas e diretas** para corrigir os erros.
+
+---
+
+## 🧾 Saída esperada (JSON estrito)
+
+```json
+{
+  "nicho": "string",
+  "amostras": 50,
+  "estatisticas_texto": {
+    "caracteres": { "media": 0, "mediana": 0, "min": 0, "max": 0 },
+    "palavras": { "media": 0, "mediana": 0, "min": 0, "max": 0 }
+  },
+  "padroes_negativos": [
+    {
+      "ranking": 1,
+      "padrao": "Sem gatilho + Promessa vaga",
+      "descricao": "Títulos que não despertam emoção nem comunicam benefício concreto.",
+      "frequencia": 0,
+      "percentual": 0,
+      "outlierScoreMedio": 0,
+      "scoreFinalMedio": 0,
+      "exemplos": ["...", "..."],
+      "problemas_comuns": [
+        "Falta de emoção",
+        "Sem número ou benefício específico",
+        "Palavras genéricas"
+      ],
+      "recomendacao": "Adicionar gatilho emocional e promessa clara de transformação.",
+      "impacto_estimado": "reduz engajamento inicial por falta de estímulo visual e emocional"
+    }
+  ],
+  "elementos_estruturais": {
+    "sem_numero": { "contagem": 0, "percentual": 0 },
+    "sem_gatilho": { "contagem": 0, "percentual": 0 },
+    "sem_promessa": { "contagem": 0, "percentual": 0 },
+    "muito_longo": { "contagem": 0, "percentual": 0 },
+    "titulo_confuso": { "contagem": 0, "percentual": 0 },
+    "usa_palavras_fracas": { "contagem": 0, "percentual": 0 }
+  },
+  "power_words_fracas": [
+    { "termo": "coisa", "contagem": 0 },
+    { "termo": "importante", "contagem": 0 },
+    { "termo": "veja", "contagem": 0 },
+    { "termo": "entenda", "contagem": 0 }
+  ],
+  "gatilhos_ausentes": [
+    { "nome": "curiosidade", "faltando_em": 0, "percentual": 0 },
+    { "nome": "urgência", "faltando_em": 0, "percentual": 0 },
+    { "nome": "autoridade", "faltando_em": 0, "percentual": 0 },
+    { "nome": "prova_social", "faltando_em": 0, "percentual": 0 }
+  ],
+  "anomalias": [
+    { "padrao": "Título excessivamente técnico", "ocorrencias": 0 },
+    { "padrao": "Mistura de dois temas sem conexão", "ocorrencias": 0 }
+  ],
+  "insights_gerais": {
+    "erro_mais_comum": "string",
+    "elemento_mais_ausente": "string",
+    "estrutura_mais_ineficaz": "string",
+    "resumo": "1–2 frases diretas sobre o que mais compromete a performance dos títulos."
+  }
+}
+```
 >
 > **Como o prompt limita o retorno:**
 >
@@ -272,15 +380,13 @@ return $input.all().slice(0, limit);
 
 ---
 
-## ✅ Resultado Final da Parte 2
+## ✅ Resultado Final da Parte 1
 
 **Input:** Títulos extraídos da planilha *Dados ordenados*.
 **Output:** Análises positiva e negativa em formato JSON armazenadas na aba *Identificação de padrões*.
 **Próxima Etapa:** Consumir esses dados para gerar insights ou roteiros automatizados.
 
 ---
-
-Posso agora gerar a **Parte 3** com o mesmo padrão (mantendo referências e sequência correta). Deseja que eu continue?
 
 
 
