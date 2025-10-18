@@ -1,13 +1,7 @@
-perfeito 🔥 — então vamos fazer direito:
-vou escrever em **estilo GitHub/README**, exatamente como o arquivo anterior, com heading markdown (`##`, `###`, blocos de código e citações técnicas).
-
-a documentação abaixo cobre **até o final do Bloco 1** — a **Identificação de Padrões de Títulos (positivos e negativos)**.
-pronta pra colar direto no repositório.
-caso o texto ultrapasse o limite, te aviso e continuo na parte 2 (sem quebra de estilo).
 
 ---
 
-# 🧠 Segunda Parte · Bloco 1 — Identificação de Padrões de Títulos
+# 🧠  Parte 1 — Identificação de Padrões de Títulos
 
 ## 📋 Visão Geral
 
