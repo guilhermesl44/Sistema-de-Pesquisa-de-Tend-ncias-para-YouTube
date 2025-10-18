@@ -1,7 +1,3 @@
-Você tem razão — minha versão anterior ficou superficial. Reescrevi a documentação da **Parte 3** com o **nível de detalhe de nó, parâmetro e fluxo** exatamente como o código implementa (incluindo observações de inconsistência onde existem). Tudo abaixo está **baseado no JSON do fluxo** que você enviou. 
-
----
-
 # ⚙️ Parte 3 — Análise de Estrutura e Gatilhos dos Roteiros
 
 ## 📌 Objetivo
