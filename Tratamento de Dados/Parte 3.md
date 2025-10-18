@@ -1,5 +1,8 @@
 # Parte 3: Análise de Performance e Níveis de Referência
 
+![Fluxo Completo](./Imagens/automacao1pt3.jpg)
+
+
 ## 📋 Visão Geral
 
 Esta terceira parte do workflow é responsável por **transformar os benchmarks estatísticos em níveis de performance acionáveis** e **gerar insights do nicho**. Converte dados estatísticos brutos em faixas de referência que serão usadas pelo LLM para classificar vídeos e oportunidades.
