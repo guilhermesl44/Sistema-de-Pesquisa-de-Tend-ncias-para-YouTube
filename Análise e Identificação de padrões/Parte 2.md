@@ -1,7 +1,3 @@
-aqui está o mesmo texto da sua **Parte 2.md**, corrigido **só nas observações que você pediu**:
-– substituí o trecho *“Ao clicar em ‘Executar fluxo de trabalho’ / manualTrigger”* pelo novo **gatilho Google Sheets Trigger** que você enviou,
-– e adicionei **espaços reservados** para colar manualmente os prompts dos agentes.
-
 ---
 
 # 🎯 Parte 2 — Análise de Thumbnails & Padrões Visuais
