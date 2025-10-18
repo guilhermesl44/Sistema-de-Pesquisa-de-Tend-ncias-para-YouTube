@@ -88,7 +88,7 @@ Esta automação gera:
 - Registro automatizado na planilha “Conteúdo”
 
 > 🖼️ 
-![Fluxo Completo](./Imagens/Fluxointeiro3.jpg) 
+![Fluxo Completo](./Imagens/automacao3.jpg) 
 
 
 🔗 [Ver documentação completa da Parte 3 →](./Desenvolvimento%20de%20Ideias/README.md)
