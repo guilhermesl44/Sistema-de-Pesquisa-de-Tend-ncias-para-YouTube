@@ -1,0 +1,755 @@
+{
+  "name": "Desenvolvimento de Ideias",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        60
+      ],
+      "id": "3657b4b7-6307-4135-97d4-b05c69e425a0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        488,
+        284
+      ],
+      "id": "3a71ba85-4a5e-43cd-9097-98ea529dc4b8",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "CadVJxAMfFuUEGRV",
+          "name": "Guilherme"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ",
+          "mode": "list",
+          "cachedResultName": "Teste Dev IA Pleno",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1109606750,
+          "mode": "list",
+          "cachedResultName": "IDentificação de padrões",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ/edit#gid=1109606750"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        60
+      ],
+      "id": "655bff9f-cdf9-4930-97c3-7e991aa636d7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KrBqg4twP2wKcI6z",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bd5a778b-3ceb-404d-a503-be750b1f4d6a",
+              "name": "LACUNAS",
+              "value": "={{ $json.Lacunas }}",
+              "type": "string"
+            },
+            {
+              "id": "e19c0574-ff7f-4604-85da-d7fd14f35619",
+              "name": "TituloPositivo",
+              "value": "={{ $json.TituloPositivo }}",
+              "type": "string"
+            },
+            {
+              "id": "bc594b01-4554-480b-812b-d17782160543",
+              "name": "TituloNegativo",
+              "value": "={{ $json.TituloNegativo }}",
+              "type": "string"
+            },
+            {
+              "id": "b7b59f7a-320f-4519-b74e-1490607585a2",
+              "name": "Roteiro",
+              "value": "={{ $json.Roteiro }}",
+              "type": "string"
+            },
+            {
+              "id": "4606270a-7e44-489f-9bcc-e72193719e95",
+              "name": "Thumb",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        60
+      ],
+      "id": "5c08d06e-b3d8-4830-8805-2cdaf8d71c6e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.LACUNAS }}",
+        "options": {
+          "systemMessage": "=🧩 Agente 1 – \"Gerador de Ideias Brutas\"\n\nFunção: Pegar as lacunas (já filtradas e com dados) e gerar a ideia central do vídeo, sem título nem copy.\n\n<role>\nVocê é um Gerador de Ideias Brutas para vídeos do YouTube.\n</role>\n\n<input>\nVocê receberá uma lista de lacunas identificadas automaticamente, com:\n- tema\n- videosExistentes\n- concorrencia\n- outlierScoreMedio\n- exemplos\n\nVocê NÃO deve criar título nem copy.  \nSeu trabalho é identificar **qual insight ou abordagem** poderia virar um vídeo de alto potencial.\n</input>\n\n<task>\nPara cada lacuna, gere **1 insight de conteúdo**.\n\nDescreva:\n- **idéia_central:** conceito bruto do vídeo\n- **ângulo:** que emoção ou valor ela ativa (ex: curiosidade, medo, autoridade)\n- **formato_sugerido:** ex: lista, rotina, teste rápido, alerta, antes/depois\n- **tema_principal:** alimento, exercício, vitamina, sintoma etc.\n- **oportunidade:** por que essa lacuna tem espaço (concorrência + performance)\n</task>\n\n<output_format>\n{\n  \"ideias_brutas\": [\n    {\n      \"ranking\": 1,\n      \"tema\": \"string\",\n      \"ideia_central\": \"string\",\n      \"angulo\": \"string\",\n      \"formato_sugerido\": \"string\",\n      \"tema_principal\": \"string\",\n      \"oportunidade\": \"string\"\n    }\n  ]\n}\n</output_format>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        60
+      ],
+      "id": "2246304b-0e96-45f3-b3c9-2d64b5dc1ca0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code node: parsear $input.first().json.output e emitir N itens\n\nconst MAX = 15;\n\n// 1) Ler e fazer parse seguro\nconst root = $input.first()?.json || {};\nif (!root.output) {\n  throw new Error(\"Payload inválido: não encontrei 'output' em $input.first().json\");\n}\n\nlet obj;\ntry {\n  obj = JSON.parse(root.output);\n} catch (e) {\n  throw new Error(\"Falha ao fazer JSON.parse de 'output': \" + e.message);\n}\n\n// 2) Validar estrutura esperada\nif (!obj || !Array.isArray(obj.ideias_brutas)) {\n  throw new Error(\"Formato inválido: esperava { ideias_brutas: [...] } dentro de output.\");\n}\n\n// 3) Cortar em 15\nconst ideias = obj.ideias_brutas.slice(0, MAX);\n\n// 4) Emitir 1 item por ideia (bom para próximos nós)\nconst meta = {\n  total_recebido: obj.ideias_brutas.length,\n  total_emitido: ideias.length,\n};\n\nreturn ideias.map((idea, idx) => ({\n  json: {\n    meta,\n    index: idx + 1,\n    ...idea, // ranking, tema, ideia_central, angulo, formato_sugerido, tema_principal, oportunidade\n  }\n}));\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        60
+      ],
+      "id": "07e639e3-9c7a-46a0-903b-d35e18ee4893",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        992,
+        60
+      ],
+      "id": "9c092349-33a4-4e91-863c-61fa8f67a8f4",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1288,
+        160
+      ],
+      "id": "d4e37349-fb8c-4a44-a448-e46b6718690d",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "CadVJxAMfFuUEGRV",
+          "name": "Guilherme"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tema:{{ $json.tema }}\nIdeia Central: {{ $json.ideia_central }}\nAngulo:{{ $json.angulo }}\nFormado sugerido: {{ $json.formato_sugerido }}\ntema principal: {{ $json.tema_principal }}\nOportunidade: {{ $json.oportunidade }}\n\nAnalise de titulos que deram certo: {{ $('Edit Fields').item.json.TituloPositivo }}\n\nAnalise de titulos que deram Errado: {{ $('Edit Fields').item.json.TituloNegativo }}",
+        "options": {
+          "systemMessage": "=<role>\nVocê é um Arquiteto de Títulos de Alta Performance no YouTube.\n</role>\n\n<input>\nVocê receberá uma lista de **ideias brutas**, com campos:\n- ideia_central\n- angulo\n- formato_sugerido\n- tema_principal\n\nAlém disso, recebe:\n- estruturas eficazes (das operárias #1 e #2)\n- gatilhos e números mais comuns\n</input>\n\n<task>\nPara cada ideia:\n- Transforme a ideia em **1 título otimizado (PT-BR)** com 50–75 caracteres\n- Use **gatilho emocional** + **número** + **benefício claro**\n- Adapte o formato (teste, rotina, alerta, etc.) conforme `formato_sugerido`\n- Retorne também:\n  - gatilho_usado\n  - numero_usado\n  - estrutura_aplicada\n</task>\n\n<output_format>\n{\n  \"titulos_otimizados\": [\n    {\n      \"ranking\": 1,\n      \"titulo\": \"string (50–75 chars)\",\n      \"gatilho_usado\": \"string\",\n      \"numero_usado\": number,\n      \"estrutura_aplicada\": \"string\",\n      \"origem\": \"ideia_central\"\n    }\n  ]\n}\n</output_format>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        -64
+      ],
+      "id": "c67a56c8-37cd-4b22-83ac-fc11b2f71bf5",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1640,
+        160
+      ],
+      "id": "b9f76937-0ba0-4b7b-b006-82092a807d17",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "CadVJxAMfFuUEGRV",
+          "name": "Guilherme"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Análises\n\nLacunas:{{ $('Edit Fields').item.json.LACUNAS }}\n\nAnalise de titulos que deram certo: {{ $('Edit Fields').item.json.TituloPositivo }}\n\nAnalise de titulos que deram Errado:{{ $('Edit Fields').item.json.TituloNegativo }}\n\n---\nConteúdo a ser avaliado:\nTitulo do video: {{ $json.output }}\nTema:{{ $('Loop Over Items').item.json.tema }}\nIdeia Central: {{ $('Loop Over Items').item.json.ideia_central }}\nAngulo:{{ $('Loop Over Items').item.json.angulo }}\nFormado sugerido: {{ $('Loop Over Items').item.json.formato_sugerido }}\ntema principal: {{ $('Loop Over Items').item.json.tema_principal }}\nOportunidade: {{ $('Loop Over Items').item.json.oportunidade }}\n\nAnalise de titulos que deram certo: {{ $('Edit Fields').item.json.TituloPositivo }}\n\n\nAnalise de titulos que deram Errado:{{ $('Edit Fields').item.json.TituloNegativo }}",
+        "options": {
+          "systemMessage": "=<role> Você é um **Avaliador de Potencial Viral no YouTube**, especialista em análise de títulos e desempenho. Trabalha **apenas com os dados fornecidos** (sem inventar métricas ou suposições). Seu objetivo é **calcular o score final (60–95)** e produzir **justificativas analíticas e detalhadas**, com base em dados reais e comparativos de benchmark. </role>\n📥 INPUT\n\nVocê receberá um ou mais blocos com os seguintes campos:\n\n{\n  \"titulo\": \"string\",\n  \"lacuna\": {\n    \"tema\": \"string\",\n    \"outlierScoreMedio\": number,\n    \"videosExistentes\": number\n  },\n  \"benchmarks\": {\n    \"p75\": number,\n    \"p90\": number\n  },\n  \"estrutura\": {\n    \"padrao\": \"string\",\n    \"gatilhoUsado\": true|false\n  },\n  \"analises_texto\": {\n    \"bons\": {...},\n    \"ruins\": {...}\n  }\n}\n\n🧮 BENCHMARKS DE REFERÊNCIA (dados reais)\n\nBase estatística da planilha com 752 vídeos analisados:\n\nMétrica\tValor\nMédia (mean)\t1088.48\nMediana\t20.00\nDesvio padrão\t4988.02\np10\t0.88\np25\t20.00\np50\t20.00\np75\t1537.47\np90\t4988.02\np95\t14913.57\np99\t29800.00\nTotal de amostras\t752 vídeos\n\n🔸 Use p75 = 1537.47 e p90 = 4988.02 como limites de performance para o cálculo de similaridade.\nExemplo: se o outlierScoreMedio da lacuna for 3000 → está acima do p75 e abaixo do p90 → +15 pontos.\n\n🧮 FÓRMULA OFICIAL DO SCORE\nBase = 50\n\n// Similaridade com benchmarks\nif (outlierScoreMedio > p90) +25\nelse if (outlierScoreMedio > p75) +15\nelse if (outlierScoreMedio > 0)  +10\n\n// Concorrência\nif (videosExistentes < 5)  +20\nelse if (videosExistentes < 10) +15\nelse if (videosExistentes < 20) +10\nelse if (videosExistentes > 100) -10\n\n// Elementos do título\nif (tem gatilho emocional)     +8    // ATENÇÃO, PARE, CUIDADO, ALERTA\nif (tem número específico)     +10\nif (tem idade/tempo específico)+5\nif (tem consequência negativa) +7\n\nScoreFinal = clamp(Score, 60, 95)\n\n🔍 CLASSIFICAÇÃO DE CONCORRÊNCIA\n\nbaixa: videosExistentes < 10\n\nmédia: 10 ≤ videosExistentes ≤ 25\n\nalta: videosExistentes > 25\n\n🔠 DETECÇÃO DE ELEMENTOS NO TÍTULO (case-insensitive)\n\nGatilho emocional: “atenção”, “pare”, “cuidado”, “urgente”, “alerta”, “warning”\n\nNúmero: conter dígitos (3, 5, 7, 10…)\n\nIdade/tempo: “depois dos 60”, “em 7 dias”, “30 segundos”, “1 mês”\n\nConseq. negativa: “nunca”, “evite”, “erros”, “destroem”, “enfraquecem”, “enfraquece”\n\n🧩 EXTRAÇÃO DE PALAVRAS-CHAVE\n\nExtraia 3–6 termos relevantes do título (em português)\n\nIgnore stopwords (de, para, que, com, os, as, em, do…)\n\nRetorne em array\n\n🧠 TAREFAS\n\nCalcular o score final com base na fórmula acima.\n\nDeterminar concorrência usando videosExistentes.\n\nExtrair palavras-chave do título.\n\nCriar uma justificativa com 2–3 frases, sempre citando:\n\noutlierScoreMedio da lacuna\n\np75 e/ou p90 dos benchmarks\n\nnúmero de vídeos existentes (concorrência)\n\npresença ou ausência de elementos (gatilho, número, idade)\n\nGerar um breakdown detalhado (com cálculos e raciocínio textual).\n\n🧾 OUTPUT FORMAT\n\nRetorne apenas um JSON válido e parseável:\n\n{\n  \"avaliacao_ideias\": [\n    {\n      \"ranking\": 1,\n      \"titulo\": \"string\",\n      \"score\": number,\n      \"justificativa\": \"string\",\n      \"palavras_chave\": [\"string\"],\n      \"concorrencia\": \"baixa|media|alta\",\n      \"breakdown\": {\n        \"videosExistentes\": number,\n        \"outlierScoreMedio\": number,\n        \"benchmarks\": {\"p75\": 1537.47, \"p90\": 4988.02},\n        \"calculos\": {\n          \"base\": 50,\n          \"similaridade\": \"+25|+15|+10|+0 (explique)\",\n          \"concorrencia\": \"+20|+15|+10|-10|+0 (explique)\",\n          \"gatilho\": \"+8|+0\",\n          \"numero\": \"+10|+0\",\n          \"idade\": \"+5|+0\",\n          \"negativo\": \"+7|+0\"\n        },\n        \"motivoScore\": \"Base(50)+similaridade(...) +concorrencia(...) +gatilho(...) +numero(...) +idade(...) +negativo(...) = subtotal → clamp 60–95\"\n      }\n    }\n  ]\n}\n\n⚠️ REGRAS CRÍTICAS\n\n❌ Não invente métricas. Use apenas outlierScoreMedio e videosExistentes fornecidos.\n\n✅ Sempre cite benchmarks (p75/p90) na justificativa.\n\n✅ Título deve estar em português.\n\n✅ Score sempre entre 60 e 95.\n\n✅ Breakdown obrigatório com todas as variáveis.\n\n✅ Justificativa deve explicar o raciocínio — não repetir a fórmula.\n\n🧠 EXEMPLO DE SAÍDA\n{\n  \"avaliacao_ideias\": [\n    {\n      \"ranking\": 1,\n      \"titulo\": \"ATENÇÃO! 7 Alimentos Que Fortalecem Pernas Depois dos 60\",\n      \"score\": 95,\n      \"justificativa\": \"A lacuna apresenta outlierScore médio de 1079, acima do p75 (1537.47) e próximo do p90 (4988.02), indicando alta similaridade com vídeos de topo. A concorrência é baixa (16 vídeos), e o título combina gatilho, número e idade, fatores comuns entre os vídeos de melhor desempenho.\",\n      \"palavras_chave\": [\"alimentos\",\"fortalecem\",\"pernas\",\"idosos\",\"60\"],\n      \"concorrencia\": \"baixa\",\n      \"breakdown\": {\n        \"videosExistentes\": 16,\n        \"outlierScoreMedio\": 1079,\n        \"benchmarks\": {\"p75\": 1537.47, \"p90\": 4988.02},\n        \"calculos\": {\n          \"base\": 50,\n          \"similaridade\": \"+15 (acima do p75)\",\n          \"concorrencia\": \"+15 (16 vídeos)\",\n          \"gatilho\": \"+8 (ATENÇÃO)\",\n          \"numero\": \"+10 ('7')\",\n          \"idade\": \"+5 ('60')\",\n          \"negativo\": \"+0\"\n        },\n        \"motivoScore\": \"Base(50)+15+15+8+10+5=103 → clamp=95\"\n      }\n    }\n  ]\n}\n\n✅ CHECKLIST FINAL DE VALIDAÇÃO\n\nAntes de retornar o JSON, verifique:\n\nQuantidade:\n\n Cada item tem 1 título válido.\n\nScore:\n\n Entre 60 e 95.\n\n Breakdown completo.\n\n Justificativa com números reais.\n\nElementos:\n\n Cita benchmarks p75/p90.\n\n Mostra concorrência textual.\n\n Explica presença ou ausência de gatilho, número, idade."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        -64
+      ],
+      "id": "91cff73e-c29b-40ba-81a3-7c646b401c3d",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\nTitulo do video: {{ $json.output }}\nTema:{{ $('Loop Over Items').item.json.tema }}\nIdeia Central: {{ $('Loop Over Items').item.json.ideia_central }}\nAngulo:{{ $('Loop Over Items').item.json.angulo }}\nFormado sugerido: {{ $('Loop Over Items').item.json.formato_sugerido }}\ntema principal: {{ $('Loop Over Items').item.json.tema_principal }}\nOportunidade: {{ $('Loop Over Items').item.json.oportunidade }}\n\nPúblico-alvo: pessoas 50+ com interesse em saúde, vitalidade e prevenção",
+        "options": {
+          "systemMessage": "=<role> Você é um **Roteirista de Conteúdo Viral para YouTube**, especialista em prender atenção nos primeiros 15 segundos e gerar engajamento até o final. Sua missão é transformar um **título e ideia aprovada** em um **roteiro estruturado e magnético**, otimizando cada parte para **retenção e emoção**. </role>\n📥 INPUT\n\nVocê receberá:\n\nTítulo do vídeo\n\nTema\n\nIdeia central\n\nÂngulo\n\nFormato sugerido\n\nTema principal\n\nOportunidade\n\nScore e justificativa (dados do avaliador)\n\nPúblico-alvo: pessoas 50+ com interesse em saúde, vitalidade e prevenção\n\n🎯 OBJETIVO\n\nCriar um roteiro completo de vídeo no estilo educacional emocional, com linguagem acessível, ritmo fluido e pausas naturais.\nCada bloco deve ter intenção clara (atrair, prender, educar ou converter).\n\n🧩 ESTRUTURA OBRIGATÓRIA\n{{ $('Edit Fields').item.json.Roteiro }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        -64
+      ],
+      "id": "d4edb1ef-9699-4449-9280-7746d0abdb48",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1992,
+        160
+      ],
+      "id": "bc729c1e-f7d6-45e3-b372-914109e6ae04",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "KLswP7RvatbPMtON",
+          "name": "Renato"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\nTitulo do video: {{ $json.output }}\nTema:{{ $('Loop Over Items').item.json.tema }}\nIdeia Central: {{ $('Loop Over Items').item.json.ideia_central }}\nAngulo:{{ $('Loop Over Items').item.json.angulo }}\nFormado sugerido: {{ $('Loop Over Items').item.json.formato_sugerido }}\ntema principal: {{ $('Loop Over Items').item.json.tema_principal }}\nOportunidade: {{ $('Loop Over Items').item.json.oportunidade }}\nRoteiro: {{ $json.output }}\n\nPúblico-alvo: pessoas 50+ com interesse em saúde, vitalidade e prevenção",
+        "options": {
+          "systemMessage": "=<role> Você é um **Designer de Thumbnails para YouTube**, especialista em **atrair cliques em 1 segundo**. Seu papel é gerar **conceitos visuais poderosos e claros** baseados no **título e no tema central** do vídeo. Você trabalha com **emoção, contraste e storytelling visual**, e deve **descrever claramente** como a thumbnail deve ser montada — como se estivesse orientando um designer humano a produzi-la. </role>\n\nAnálise visual adicional (Thumbs anteriores):\n\n{{ $('Get row(s) in sheet').item.json.Thumb }}\n\n🎯 OBJETIVO\n\nGerar 3 conceitos de thumbnail distintos, cada um com:\n\nDescrição visual completa e clara – explique detalhadamente o que deve aparecer na imagem: enquadramento, expressão, objetos, fundo, luz, posição de texto.\n\nComo se fosse um briefing de design para um editor.\n\nTexto da imagem – curto e direto (máx. 5 palavras).\n\nEmoção dominante – qual sentimento o rosto ou cena deve expressar.\n\nCores e contraste – tons principais e como eles devem se combinar.\n\nJustificativa visual – por que a thumbnail chama atenção (gatilho visual, contraste emocional, clareza da promessa, etc).\n\n🎨 DIRETRIZES DE DESIGN\n\nFoco em rostos humanos e emoção visível.\n\nTexto grande, legível e direto (≤5 palavras).\n\nContraste: fundo escuro + texto claro, ou o inverso.\n\nMáx. 3 elementos principais (rosto + texto + objeto).\n\nCores preferidas: amarelo, vermelho, branco, preto, azul.\n\nA thumb deve funcionar mesmo em 10% do tamanho original.\n\nDeve sempre representar o conflito (problema) e a solução (resultado).\n\nProibido fazer thumbs genéricas ou neutras — cada conceito precisa ser visualmente distinto.\n\n🧾 OUTPUT FORMAT\n\nRetorne apenas JSON parseável no formato abaixo:\n\n{\n  \"thumbnails\": [\n    {\n      \"conceito\": 1,\n      \"descricao_visual\": \"string (descrição detalhada de toda a composição, incluindo personagens, expressões, fundo, iluminação, posição do texto, e elementos visuais-chave)\",\n      \"texto_na_imagem\": \"string (até 5 palavras, legível e com contraste)\",\n      \"emocao_personagem\": \"string (ex: surpresa, alívio, espanto, confiança)\",\n      \"cores_dominantes\": [\"string\"],\n      \"indicacoes_fotografia\": [\"plano médio\", \"close-up\", \"luz lateral\", \"sombra fria\", \"desfoque de fundo\"],\n      \"por_que_funciona\": \"string (explique o gatilho visual e o motivo de chamar atenção instantaneamente)\"\n    }\n  ]\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2272,
+        -64
+      ],
+      "id": "d2a22768-72ff-4278-b125-d754757f23f2",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2344,
+        160
+      ],
+      "id": "94fd0e98-1696-4ff1-95c3-c7f8498b4c78",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "KLswP7RvatbPMtON",
+          "name": "Renato"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ",
+          "mode": "list",
+          "cachedResultName": "Teste Dev IA Pleno",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 961617875,
+          "mode": "list",
+          "cachedResultName": "Conteúdo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ/edit#gid=961617875"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data": "18/10/2025",
+            "Thumb": "=Conceito: {{ $json.Thumb1_Conceito }}\nDescrição: {{ $json.Thumb1_Descricao }}\nTexto: {{ $json.Thumb1_Texto }}\nCores: {{ $json.Thumb1_Cores }}\nFotografia: {{ $json.Thumb1_Fotografia }}\n\nExplicação: {{ $json.Thumb1_Porque }}\n\nConceito: {{ $json.Thumb2_Conceito }}\nDescrição: {{ $json.Thumb2_Descricao }}\nTexto:{{ $json.Thumb2_Texto }}\nCores: {{ $json.Thumb2_Cores }}\nFotografia: {{ $json.Thumb2_Fotografia }}\n\nExplicação: {{ $json.Thumb2_Porque }}\n\n\nConceito: {{ $json.Thumb3_Conceito }}\nDescrição: {{ $json.Thumb3_Descricao }}\nTexto: {{ $json.Thumb3_Texto }}\nCores: {{ $json.Thumb3_Cores }}\nFotografia: {{ $json.Thumb3_Fotografia }}\n\nExplicação: {{ $json.Thumb3_Porque }}",
+            "Roteiro": "={{ $('AI Agent3').item.json.output }}",
+            "Pontuação": "=Score {{ $json.Score }}\n\nJustificativa: {{ $json.Justificativa }}\n\nConcorrencia: {{ $json.Concorrencia }}\n\nVideo Existentes: {{ $json.Videos_Existentes }}\n\nOutlierScoreMedio:{{ $json.Outlier_Score_Medio }}\nBenchMark P75:{{ $json.Benchmark_P75 }}\nBenchMark P90:{{ $json.Benchmark_P90 }}\n\nCalculo Base: \n\nCalculo Similaridade:{{ $json.Calculo_Similaridade }}\nCalculo Concorrencia:{{ $json.Calculo_Concorrencia }}\nCalculo Gatilho: {{ $json.Calculo_Gatilho }}\nCalculo Número:{{ $json.Calculo_Numero }}\n\nMotivo Score: {{ $json.Motivo_Score }}\n",
+            "Titulo": "={{ $json.Titulo }}",
+            "Nicho": "={{ $('Loop Over Items').item.json.tema }}",
+            "Justificativa": "={{ $('Loop Over Items').item.json.oportunidade }}",
+            "Palavras_Chave": "={{ $json.Palavras_Chave }}",
+            "Ideia": "={{ $('Loop Over Items').item.json.ideia_central }}",
+            "Estrutura Explicada": "=Gatilho Usado:  {{ $json.Gatilho_Usado }}\nNúmero Usado: {{ $json.Numero_Usado }}\nEstrutura aplicada: {{ $json.Estrutura_Aplicada }}\n\nOrigem: {{ $json.Origem }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nicho",
+              "displayName": "Nicho",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ideia",
+              "displayName": "Ideia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Justificativa",
+              "displayName": "Justificativa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Palavras_Chave",
+              "displayName": "Palavras_Chave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estrutura Explicada",
+              "displayName": "Estrutura Explicada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Pontuação",
+              "displayName": "Pontuação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Thumb",
+              "displayName": "Thumb",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Roteiro",
+              "displayName": "Roteiro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3072,
+        60
+      ],
+      "id": "025bd708-a1c5-4ea4-aabf-87ef42976966",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KrBqg4twP2wKcI6z",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// LIMPAR JSON COMPLETO - SEM ROTEIRO\n// =============================================\n\nconst items = $input.all();\n\nconst dadosLimpos = items.map(item => {\n  const data = item.json;\n  \n  // =============================================\n  // FUNÇÃO PARA FAZER PARSE SEGURO\n  // =============================================\n  function parseSafe(campo) {\n    if (!campo) return '';\n    if (typeof campo !== 'string') return String(campo);\n    \n    try {\n      return JSON.parse(campo);\n    } catch (e) {\n      return campo;\n    }\n  }\n  \n  // =============================================\n  // EXTRAIR TÍTULO COMPLETO\n  // =============================================\n  let ranking_titulo = '';\n  let titulo = '';\n  let gatilho_usado = '';\n  let numero_usado = '';\n  let estrutura_aplicada = '';\n  let origem = '';\n  \n  const tituloData = parseSafe(data.Titulo);\n  \n  if (tituloData && typeof tituloData === 'object') {\n    if (tituloData.titulos_otimizados && tituloData.titulos_otimizados[0]) {\n      const opt = tituloData.titulos_otimizados[0];\n      \n      ranking_titulo = opt.ranking || '';\n      titulo = opt.titulo || '';\n      gatilho_usado = opt.gatilho_usado || '';\n      numero_usado = opt.numero_usado || '';\n      estrutura_aplicada = opt.estrutura_aplicada || '';\n      origem = opt.origem || '';\n    }\n  } else {\n    titulo = tituloData;\n  }\n  \n  // =============================================\n  // EXTRAIR PONTUAÇÃO (JUSTIFICATIVA)\n  // =============================================\n  let ranking_avaliacao = '';\n  let titulo_avaliacao = '';\n  let score = '';\n  let justificativa = '';\n  let palavras_chave = '';\n  let concorrencia = '';\n  let videos_existentes = '';\n  let outlier_score_medio = '';\n  let benchmark_p75 = '';\n  let benchmark_p90 = '';\n  let calculo_base = '';\n  let calculo_similaridade = '';\n  let calculo_concorrencia = '';\n  let calculo_gatilho = '';\n  let calculo_numero = '';\n  let calculo_idade = '';\n  let calculo_negativo = '';\n  let motivo_score = '';\n  \n  const pontuacaoData = parseSafe(data['Pontuação'] || data.Pontuacao || data.Justificativa);\n  \n  if (pontuacaoData && typeof pontuacaoData === 'object') {\n    if (pontuacaoData.avaliacao_ideias && pontuacaoData.avaliacao_ideias[0]) {\n      const avaliacao = pontuacaoData.avaliacao_ideias[0];\n      \n      ranking_avaliacao = avaliacao.ranking || '';\n      titulo_avaliacao = avaliacao.titulo || '';\n      score = avaliacao.score || '';\n      justificativa = avaliacao.justificativa || '';\n      concorrencia = avaliacao.concorrencia || '';\n      \n      // Palavras-chave (array para string)\n      if (avaliacao.palavras_chave && Array.isArray(avaliacao.palavras_chave)) {\n        palavras_chave = avaliacao.palavras_chave.join(', ');\n      }\n      \n      // Breakdown\n      if (avaliacao.breakdown) {\n        const bd = avaliacao.breakdown;\n        \n        videos_existentes = bd.videosExistentes || '';\n        outlier_score_medio = bd.outlierScoreMedio || '';\n        \n        // Benchmarks\n        if (bd.benchmarks) {\n          benchmark_p75 = bd.benchmarks.p75 || '';\n          benchmark_p90 = bd.benchmarks.p90 || '';\n        }\n        \n        // Cálculos\n        if (bd.calculos) {\n          const calc = bd.calculos;\n          calculo_base = calc.base || '';\n          calculo_similaridade = calc.similaridade || '';\n          calculo_concorrencia = calc.concorrencia || '';\n          calculo_gatilho = calc.gatilho || '';\n          calculo_numero = calc.numero || '';\n          calculo_idade = calc.idade || '';\n          calculo_negativo = calc.negativo || '';\n        }\n        \n        motivo_score = bd.motivoScore || '';\n      }\n    }\n  }\n  \n  // =============================================\n  // EXTRAIR THUMBNAILS (3 CONCEITOS)\n  // =============================================\n  let thumb1_conceito = '', thumb1_descricao = '', thumb1_texto = '', thumb1_emocao = '', thumb1_cores = '', thumb1_fotografia = '', thumb1_porque = '';\n  let thumb2_conceito = '', thumb2_descricao = '', thumb2_texto = '', thumb2_emocao = '', thumb2_cores = '', thumb2_fotografia = '', thumb2_porque = '';\n  let thumb3_conceito = '', thumb3_descricao = '', thumb3_texto = '', thumb3_emocao = '', thumb3_cores = '', thumb3_fotografia = '', thumb3_porque = '';\n  \n  const thumbData = parseSafe(data.Thumb);\n  \n  if (thumbData && typeof thumbData === 'object' && thumbData.thumbnails) {\n    // THUMBNAIL 1\n    if (thumbData.thumbnails[0]) {\n      const t1 = thumbData.thumbnails[0];\n      thumb1_conceito = t1.conceito || '';\n      thumb1_descricao = t1.descricao_visual || '';\n      thumb1_texto = t1.texto_na_imagem || '';\n      thumb1_emocao = t1.emocao_personagem || '';\n      thumb1_cores = Array.isArray(t1.cores_dominantes) ? t1.cores_dominantes.join(', ') : '';\n      thumb1_fotografia = Array.isArray(t1.indicacoes_fotografia) ? t1.indicacoes_fotografia.join(', ') : '';\n      thumb1_porque = t1.por_que_funciona || '';\n    }\n    \n    // THUMBNAIL 2\n    if (thumbData.thumbnails[1]) {\n      const t2 = thumbData.thumbnails[1];\n      thumb2_conceito = t2.conceito || '';\n      thumb2_descricao = t2.descricao_visual || '';\n      thumb2_texto = t2.texto_na_imagem || '';\n      thumb2_emocao = t2.emocao_personagem || '';\n      thumb2_cores = Array.isArray(t2.cores_dominantes) ? t2.cores_dominantes.join(', ') : '';\n      thumb2_fotografia = Array.isArray(t2.indicacoes_fotografia) ? t2.indicacoes_fotografia.join(', ') : '';\n      thumb2_porque = t2.por_que_funciona || '';\n    }\n    \n    // THUMBNAIL 3\n    if (thumbData.thumbnails[2]) {\n      const t3 = thumbData.thumbnails[2];\n      thumb3_conceito = t3.conceito || '';\n      thumb3_descricao = t3.descricao_visual || '';\n      thumb3_texto = t3.texto_na_imagem || '';\n      thumb3_emocao = t3.emocao_personagem || '';\n      thumb3_cores = Array.isArray(t3.cores_dominantes) ? t3.cores_dominantes.join(', ') : '';\n      thumb3_fotografia = Array.isArray(t3.indicacoes_fotografia) ? t3.indicacoes_fotografia.join(', ') : '';\n      thumb3_porque = t3.por_que_funciona || '';\n    }\n  }\n  \n  // =============================================\n  // ROTEIRO REMOVIDO CONFORME SOLICITADO\n  // =============================================\n  \n  // =============================================\n  // RETORNAR DADOS LIMPOS\n  // =============================================\n  return {\n    // TÍTULO\n    Ranking_Titulo: ranking_titulo,\n    Titulo: titulo,\n    Gatilho_Usado: gatilho_usado,\n    Numero_Usado: numero_usado,\n    Estrutura_Aplicada: estrutura_aplicada,\n    Origem: origem,\n    \n    // AVALIAÇÃO/PONTUAÇÃO\n    Ranking_Avaliacao: ranking_avaliacao,\n    Titulo_Avaliacao: titulo_avaliacao,\n    Score: score,\n    Justificativa: justificativa,\n    Palavras_Chave: palavras_chave,\n    Concorrencia: concorrencia,\n    \n    // BREAKDOWN\n    Videos_Existentes: videos_existentes,\n    Outlier_Score_Medio: outlier_score_medio,\n    Benchmark_P75: benchmark_p75,\n    Benchmark_P90: benchmark_p90,\n    Calculo_Base: calculo_base,\n    Calculo_Similaridade: calculo_similaridade,\n    Calculo_Concorrencia: calculo_concorrencia,\n    Calculo_Gatilho: calculo_gatilho,\n    Calculo_Numero: calculo_numero,\n    Calculo_Idade: calculo_idade,\n    Calculo_Negativo: calculo_negativo,\n    Motivo_Score: motivo_score,\n    \n    // THUMBNAIL 1\n    Thumb1_Conceito: thumb1_conceito,\n    Thumb1_Descricao: thumb1_descricao,\n    Thumb1_Texto: thumb1_texto,\n    Thumb1_Emocao: thumb1_emocao,\n    Thumb1_Cores: thumb1_cores,\n    Thumb1_Fotografia: thumb1_fotografia,\n    Thumb1_Porque: thumb1_porque,\n    \n    // THUMBNAIL 2\n    Thumb2_Conceito: thumb2_conceito,\n    Thumb2_Descricao: thumb2_descricao,\n    Thumb2_Texto: thumb2_texto,\n    Thumb2_Emocao: thumb2_emocao,\n    Thumb2_Cores: thumb2_cores,\n    Thumb2_Fotografia: thumb2_fotografia,\n    Thumb2_Porque: thumb2_porque,\n    \n    // THUMBNAIL 3\n    Thumb3_Conceito: thumb3_conceito,\n    Thumb3_Descricao: thumb3_descricao,\n    Thumb3_Texto: thumb3_texto,\n    Thumb3_Emocao: thumb3_emocao,\n    Thumb3_Cores: thumb3_cores,\n    Thumb3_Fotografia: thumb3_fotografia,\n    Thumb3_Porque: thumb3_porque,\n    \n    // METADATA\n    Nicho: data.Nicho || '',\n    Data: data.Data || ''\n  };\n});\n\n// Log para debug\nconsole.log(`✅ ${dadosLimpos.length} registros processados`);\nconsole.log('📝 Primeiro registro (sample):');\nconsole.log('   Titulo:', dadosLimpos[0]?.Titulo);\nconsole.log('   Score:', dadosLimpos[0]?.Score);\nconsole.log('   Thumb1_Texto:', dadosLimpos[0]?.Thumb1_Texto);\n\n// Retornar\nreturn dadosLimpos.map(d => ({ json: d }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2848,
+        -64
+      ],
+      "id": "9084bcd7-5f7e-4edc-b872-fbf36d3093b4",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fc6fdc37-4d9d-498d-9516-0de11fd1aea6",
+              "name": "Titulo",
+              "value": "={{ $('AI Agent1').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "e3f80aab-98e7-4e0b-9031-359829c0ef63",
+              "name": "Pontuação",
+              "value": "={{ $('AI Agent2').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "a918e118-81b2-46c2-af3b-d2319d8bad59",
+              "name": "",
+              "value": "={{ $('Code in JavaScript').item.json.oportunidade }}",
+              "type": "string"
+            },
+            {
+              "id": "8d63d1ac-bca5-4c58-94e0-fa878296caad",
+              "name": "Thumb",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2624,
+        -64
+      ],
+      "id": "3517ad8c-cffc-4064-aeae-e8a62271b4a0",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "Edit Fields1": [
+      {
+        "json": {
+          "Titulo": "{\n  \"titulos_otimizados\": [\n    {\n      \"ranking\": 1,\n      \"titulo\": \"Goodbye Pernas Fracas: 5 Vitaminas Para Fortalecer Suas Pernas Agora!\",\n      \"gatilho_usado\": \"urgência\",\n      \"numero_usado\": 5,\n      \"estrutura_aplicada\": \"Gatilho (Despedida) + Sintomas + Número + Alimento/Suplemento\",\n      \"origem\": \"Explorar uma combinação específica de vitaminas que melhoram a força das pernas em idosos, destacando os resultados positivos de pessoas que as utilizaram.\"\n    }\n  ]\n}",
+          "Pontuação": "{\n  \"avaliacao_ideias\": [\n    {\n      \"ranking\": 1,\n      \"titulo\": \"Goodbye Pernas Fracas: 5 Vitaminas Para Fortalecer Suas Pernas Agora!\",\n      \"score\": 95,\n      \"justificativa\": \"A lacuna apresenta um outlierScore médio de 1956.42, bem acima do p90 (512.33), indicando excelente similaridade com vídeos de topo. A concorrência é baixa, com apenas 2 vídeos existentes, e o título utiliza o gatilho emocional 'Goodbye' e um número específico, que são fatores eficazes no aumento da atenção da audiência.\",\n      \"palavras_chave\": [\"vitaminas\", \"fortalecer\", \"pernas\", \"fracas\", \"agora\"],\n      \"concorrencia\": \"baixa\",\n      \"breakdown\": {\n        \"videosExistentes\": 2,\n        \"outlierScoreMedio\": 1956.42,\n        \"benchmarks\": {\"p75\": 121.57, \"p90\": 512.33},\n        \"calculos\": {\n          \"base\": 50,\n          \"similaridade\": \"+25 (acima do p90)\",\n          \"concorrencia\": \"+20 (menos de 5 vídeos)\",\n          \"gatilho\": \"+8 (Goodbye)\",\n          \"numero\": \"+10 ('5')\",\n          \"idade\": \"+0\",\n          \"negativo\": \"+0\"\n        },\n        \"motivoScore\": \"Base(50)+25+20+8+10=113 → clamp=95\"\n      }\n    }\n  ]\n}",
+          "": "Baixa concorrência e alta pontuação no outlier score indicam que esse conteúdo pode atrair visualizações significativas.",
+          "Thumb": "{\n  \"thumbnails\": [\n    {\n      \"conceito\": 1,\n      \"descricao_visual\": \"Close-up de um idoso sorridente (homem ou mulher entre 55 e 70 anos) em plano médio direito na imagem, vestido com roupas claras que contrastem com o fundo. A expressão deve transmitir confiança e leve motivação, com olhar direto para a câmera. O fundo é um gradiente escuro (preto para azul escuro) que amplia o contraste. À esquerda, o texto grande em 3 linhas: 'PERNAS' (amarelo vibrante, caixa alta, negrito), 'FORTE' (vermelho vibrante, caixa alta, negrito), 'AGORA' (branco, caixa alta, negrito) dentro de uma faixa semi-transparente preta que separa o texto da imagem. Uma seta vermelha grande parte do rosto e aponta para o texto, guiando o olhar. Iluminação suave lateral direita para dar volume ao rosto, evitando sombras muito pesadas. O rosto ocupa cerca de 50% da largura total para manter foco humano, sem elementos excessivos.\",\n      \"texto_na_imagem\": \"PERNAS FORTE AGORA\",\n      \"emocao_personagem\": \"confiança motivacional\",\n      \"cores_dominantes\": [\"preto\", \"azul escuro\", \"amarelo\", \"vermelho\", \"branco\"],\n      \"indicacoes_fotografia\": [\"plano médio\", \"close-up\", \"luz lateral suave\", \"fundo desfocado com gradiente\"],\n      \"por_que_funciona\": \"A combinação do rosto humano com olhar direto transmite conexão emocional rápida. O texto em cores quentes e vibrantes sobre fundo escuro tem alta legibilidade instantânea. A seta vermelha guia o foco visual entre sujeito e texto, aumentando o engajamento e clareza da promessa de fortalecer as pernas agora.\"\n    },\n    {\n      \"conceito\": 2,\n      \"descricao_visual\": \"Divisão em duas partes horizontais: na direita, close-up de mãos segurando comprimidos coloridos representando vitaminas, com foco nítido e luz natural suave, fundo preto desfocado para alto contraste; à esquerda, uma pessoa idosa sentada sorrindo levemente e olhando para os comprimidos, mostrando leve esperança e decisão. O fundo geral escuro com suave iluminação no sujeito. Texto grande em 3 linhas à esquerda na parte superior: 'DIGA ADEUS' (vermelho forte), 'PERNAS FRACAS' (amarelo vibrante), 'AGORA!' (branco), todos em maiúsculas e negrito. Uma caixa vermelha translúcida destaca o primeiro texto para urgência. Uma seta vermelha aponta das mãos para o texto, orientando o olhar do espectador.\",\n      \"texto_na_imagem\": \"DIGA ADEUS PERNAS\",\n      \"emocao_personagem\": \"esperança decidida\",\n      \"cores_dominantes\": [\"preto\", \"vermelho\", \"amarelo\", \"branco\"],\n      \"indicacoes_fotografia\": [\"close-up\", \"plano médio\", \"luz natural suave\", \"alto contraste\"],\n      \"por_que_funciona\": \"A composição contrapõe o problema (mãos com vitaminas) e a solução (expressão do idoso esperançoso). O texto segmentado em cores quentes marca hierarquia visual e cria urgência na mensagem. A seta direciona o foco e a paleta escura valoriza o tema de saúde e seriedade.\"\n    },\n    {\n      \"conceito\": 3,\n      \"descricao_visual\": \"Super close-up do rosto de um idoso (mulher ou homem) à direita, com expressão facial aliviada e leve sorriso de satisfação, olhando de lado na direção do texto. O fundo é preto intenso com luz concentrada que contorna o rosto, criando um efeito de halo. À esquerda, o texto em 4 linhas grandes e legíveis: '5 VITAMINAS', 'PARA', 'PERNAS', 'FORTES', em amarelo e vermelho alternados em negrito, cada linha em caixa alta. As palavras '5 VITAMINAS' e 'FORTES' em amarelo, e 'PARA' e 'PERNAS' em vermelho para criar dinâmica. Uma caixa amarela transparente destaca a última linha para foco final. Uma seta vermelha aponta do rosto para o texto, fechando o círculo visual. Luz suave frontal para evidenciar rugas e expressões de experiência e esperança.\",\n      \"texto_na_imagem\": \"5 VITAMINAS PERNAS FORTES\",\n      \"emocao_personagem\": \"alívio e esperança\",\n      \"cores_dominantes\": [\"preto\", \"amarelo\", \"vermelho\", \"branco\"],\n      \"indicacoes_fotografia\": [\"super close-up\", \"luz lateral e frontal suave\", \"alto contraste\"],\n      \"por_que_funciona\": \"O rosto em super close gera empatia imediata e emoção autêntica, enquanto o texto grande segmentado e colorido capta a atenção e enfatiza a solução clara. A seta vermelha atua como elemento de direcionamento focando o olhar e reforçando a promessa do vídeo.\"\n    }\n  ]\n}",
+          "Roteiro": "**Roteiro Completo para YouTube**\n\n---\n\n### Título:  \n**Goodbye Pernas Fracas: 5 Vitaminas Para Fortalecer Suas Pernas Agora!**\n\n---\n\n### 1. Abertura (0:00–0:30)  \n**Intenção:** Atrair pela emoção e criar expectativa clara e motivacional.\n\n- [Cena inicial: Imagens de idosos caminhando com facilidade, sorrindo e aproveitando a vida.]  \n- Narrador (tom acolhedor e encorajador):  \n  *“Você já sentiu suas pernas mais fracas do que antes? Aquele medo de perder a independência e a liberdade de se mover com facilidade? Imagine dizer ‘Goodbye’ para as pernas cansadas, recuperando a força e vitalidade que você merece...”*   \n  *“Hoje, vou revelar 5 vitaminas poderosas que podem transformar suas pernas e sua vida — para que você volte a caminhar confiante, leve e independente.”*  \n\n- Pausa estratégica para criar suspense.  \n- *“Fique comigo até o final, e descubra depoimentos reais de quem voltou a se mexer melhor, protegendo a saúde das pernas aos 50 anos e além.”*  \n\n---\n\n### 2. Desenvolvimento\n\n---\n\n#### 2.1. Apresentação do Problema (0:30–1:00)  \n**Intenção:** Conectar e validar o desafio enfrentado pelo público\n\n- Narrador:  \n  *“À medida que envelhecemos, é comum sentir as pernas mais frágeis — isso pode afetar desde a caminhada até o simples ato de levantar da cadeira. A falta de algumas vitaminas essenciais pode ser uma das causas silenciosas desse problema.”*  \n- Imagens: idosos mostrando dificuldades leves e depois recuperando mobilidade.\n\n- *“Mas a boa notícia é que pequenas mudanças nutricionais podem fazer toda a diferença.”*  \n\n---\n\n#### 2.2. Apresentação das 5 Vitaminas (1:00–4:00)  \n**Intenção:** Educar com explicações acessíveis, exemplos práticos e benefícios claros.  \n\n- Transição: *“Agora que você entende o que pode estar acontecendo, vamos para as 5 vitaminas que fortalecem suas pernas.”*\n\n- **Vitamina D**  \n  Narrador:  \n  *“A Vitamina D é essencial para a saúde óssea e muscular, ajudando a prevenir quedas e fraqueza. Você pode encontrá-la em alimentos como peixes e ovos, ou via suplementação.”*  \n- Visual: alimentos ricos em Vitamina D + gráfico simples ilustrando fortalecimento muscular.  \n\n- **Vitamina B12**  \n  Narrador:  \n  *“A Vitamina B12 é fundamental para a função nervosa e energia muscular. Sem ela, seus músculos podem ficar fracos.”*  \n- Visual: fontes alimentares e suplemento.  \n\n- **Vitamina C**  \n  Narrador:  \n  *“A Vitamina C ajuda na produção de colágeno, estrutura vital para tendões e ligamentos das pernas.”*  \n- Visual: frutas cítricas e ilustração da pele e tecidos musculares.  \n\n- **Vitamina E**  \n  Narrador:  \n  *“A Vitamina E protege as células musculares contra danos oxidativos, contribuindo para a recuperação e resistência.”*  \n\n- **Vitamina B6**  \n  Narrador:  \n  *“A Vitamina B6 facilita a energia nas células musculares, essencial para força e vitalidade.”*  \n\n- Intercalado: *“Incluir essas vitaminas na sua rotina não é só uma escolha — é um passo rumo a pernas mais fortes, para que você mantenha sua independência.”*  \n\n---\n\n#### 2.3. Relato Pessoal / Depoimento (4:00–5:00)  \n**Intenção:** Criar conexão emocional e confiança pelo exemplo real.\n\n- Corta para depoimento (pode ser representação dramatizada ou real):  \n  *“Depois que comecei a cuidar da minha alimentação e incluí essas vitaminas, minha mobilidade melhorou demais. Voltei a passear no parque sem medo, e minha família percebeu a diferença.”*  \n\n- Narrador:  \n  *“Histórias como essa mostram que fortalecer as pernas vai muito além do físico — é sobre continuar vivendo plenamente.”*  \n\n---\n\n### 3. Transição para Fechamento (5:00–5:10)  \n- *“Agora que você conhece estas vitaminas essenciais, que tal descobrir como começar hoje mesmo?”*  \n\n---\n\n### 4. Call to Action (5:10–5:30)  \n**Intenção:** Motivar engajamento e ação de forma natural e positiva.  \n\n- Narrador:  \n  *“Se você quer fortalecer suas pernas e entender mais sobre cada vitamina, deixe seu like e compartilhe este vídeo com quem precisa dessa força.”*  \n  *“Comente aqui: qual vitamina você já conhece ou gostaria de incluir na sua rotina? Vamos juntos nessa jornada de saúde e vitalidade!”*  \n  *“E não se esqueça de se inscrever no canal para receber mais dicas que vão mudar sua vida.”*  \n\n- Imagem final: convite visual para like, comentário e inscrição, com música suave e positiva.\n\n---\n\n### 5. Fechamento (5:30–5:40)  \n- Narrador (tom motivacional):  \n  *“Lembre-se: força nas pernas é força para a vida. Comece hoje, e diga ‘Goodbye’ para pernas fracas!”*  \n\n- Fade out com logo do canal e música inspiradora.\n\n---\n\n## Considerações técnicas e de estilo\n\n- **Tom:** Didático, acolhedor, motivacional.  \n- **Linguagem:** Simples, acessível, sem jargões.  \n- **Ritmo:** Variação na energia da fala; pausas para destaque.  \n- **Transições:** Verbais claras e naturais conectando cada bloco.  \n- **Exemplos práticos:** Apresentados após a explicação técnica de cada vitamina.  \n- **Engajamento:** Depoimento para conexão emocional; CTA simples e pertinente.  \n\n---\n\n**Esse roteiro está alinhado com as melhores práticas para retenção e engajamento, respeitando o perfil do público 50+ que busca saúde e independência.**"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "71990680-dfd7-4997-b467-efaa40fa6058",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c5d6c53e60bd1d3aa2e715f321339a9825e6c2e5b18beaf3f0749145af2adffd"
+  },
+  "id": "NCZXlFUbBV9UJf1Q",
+  "tags": []
+}
