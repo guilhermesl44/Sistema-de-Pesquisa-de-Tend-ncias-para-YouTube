@@ -101,6 +101,8 @@ Esta automação gera:
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Planilhadosheets.jpg) 
 
+[🔗 [Acesso a planilha→](/Desenvolvimento%20de%20Ideias/)](https://docs.google.com/spreadsheets/d/1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ/edit?usp=sharing)
+
 A planilha funciona como **hub central de dados** do sistema.  
 Cada aba representa uma fase do pipeline:
 
