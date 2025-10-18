@@ -1,5 +1,7 @@
 # Parte 4: Ranking e Classificação de Vídeos
 
+![Fluxo Completo](./Imagens/automacao1pt4.jpg)
+
 ## 📋 Visão Geral
 
 Esta quarta e última parte do workflow é responsável por **rankear e classificar todos os vídeos** comparando-os com os benchmarks da Parte 3. Cada vídeo recebe um **score composto**, uma **classificação geral** e **flags especiais** que identificam outliers e oportunidades.
