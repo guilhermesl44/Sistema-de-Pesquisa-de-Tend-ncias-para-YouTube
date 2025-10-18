@@ -65,8 +65,8 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 Analisar os títulos e thumbnails previamente tratados para descobrir **padrões linguísticos e visuais** de sucesso.  
 O sistema identifica **estruturas narrativas, gatilhos emocionais, power words e composições visuais** recorrentes nos vídeos de melhor performance.
 
-> *(inserir aqui imagem do fluxo da Parte 2)*  
-> 🖼️ **[Espaço reservado para imagem do fluxo 2]**
+> 🖼️ 
+![Fluxo Completo](./Imagens/Fluxointeiro2.jpg) 
 
 🔗 [Ver documentação completa da Parte 2 →](./Análise%20e%20Identificação%20de%20padrões/README.md)
 
@@ -87,8 +87,9 @@ Esta automação gera:
 - Conceitos de thumbnail  
 - Registro automatizado na planilha “Conteúdo”
 
-> *(inserir aqui imagem do fluxo da Parte 3)*  
-> 🖼️ **[Espaço reservado para imagem do fluxo 3]**
+> 🖼️ 
+![Fluxo Completo](./Imagens/Fluxointeiro3.jpg) 
+
 
 🔗 [Ver documentação completa da Parte 3 →](./Desenvolvimento%20de%20Ideias/README.md)
 
