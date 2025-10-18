@@ -1,8 +1,4 @@
-perfeito — vou documentar esse bloco no mesmo estilo do README anterior e já apontar 3 correções que evitam erro no n8n (uma delas é crítica: o campo `imageUrls` está vazio).
-
----
-
-# 🎯 Parte 2 · Bloco 2 — Análise de Thumbnails & Padrões Visuais
+# 🎯 Parte 2  — Análise de Thumbnails & Padrões Visuais
 
 ## 📌 Objetivo
 
