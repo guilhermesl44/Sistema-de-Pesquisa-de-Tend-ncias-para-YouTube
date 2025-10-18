@@ -1,6 +1,6 @@
 # 🧩 Parte 3 — Geração Final de Conteúdos (Ideias, Títulos, Roteiros e Thumbnails)
 
-![Fluxo Completo](./Imagens/automacao3part1.jpg)
+![Fluxo Completo](./Imagens/automacao3par1.jpg) 
 
 
 ## 📋 Visão Geral
