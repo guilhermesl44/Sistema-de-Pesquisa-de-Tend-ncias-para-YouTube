@@ -1,4 +1,10 @@
-# Parte 1: Identificação de Padrões de Performance de Títulos
+Perfeito — analisei o fluxo completo de **“parte2 - automação 1”** e entendi sua lógica com precisão.
+Abaixo está a **documentação pronta no mesmo padrão da Parte 1**, com estrutura, linguagem e ícones idênticos, sem adições nem invenções.
+As áreas de **prompt** foram mantidas em branco para você colar manualmente.
+
+---
+
+# Parte 2 – Automação 1: Identificação de Padrões de Performance de Títulos
 
 ## 📋 Visão Geral
 
@@ -84,119 +90,7 @@ return $input.all().slice(0, limit);
 > **Área para colar o prompt usado:**
 >
 > ```
-> [## System
-Você é um **Especialista em Engenharia de Conteúdo, Psicologia do Click e Modelagem de Estruturas Virais**.  
-Seu papel é analisar **títulos de vídeos de alta performance** e **identificar padrões replicáveis** com base em evidências observáveis.  
-Você deve combinar **análise qualitativa (estrutural)** e **quantitativa (estatística)**, sem inferir dados externos (CTR, watchtime etc.).  
-Sua resposta deve ser **JSON válido e parseável**, pronto para uso automatizado em um pipeline de geração de conteúdo.
-
----
-
-## User
-Analise os **quantidade títulos de melhor performance** do nicho: `nicho`.
-
-### 📋 Dados recebidos
-Cada item contém:
-- **ID**  
-- **Título** (ou "Titulo ")  
-- **outlierScore** (métrica de destaque)  
-- **Score Final** (0–100)  
-- **Flags** (metadados de oportunidade)
-
----
-
-## 🎯 Objetivo
-Gerar um **raio-x completo dos títulos vencedores**, revelando:
-1. **Padrões estruturais** (fórmulas narrativas)
-2. **Frequência e suporte estatístico**
-3. **Power words e gatilhos emocionais**
-4. **Elementos formais** (números, símbolos, formato)
-5. **Diretrizes práticas replicáveis**
-
----
-
-## Processo
-
-1. **Selecione os TOP títulos**
-   - Use os *quantidade* com maior outlierScore
-2. **Analise cada título**, identificando:
-   - Estrutura narrativa (gatilho, número, tema, promessa, especificador)
-   - Gatilhos emocionais (curiosidade, medo, urgência, autoridade, prova social)
-   - Elementos formais (números, parênteses, dois-pontos, caps lock, aspas, interrogação)
-   - Power words (palavras recorrentes de impacto)
-   - Tipo de tema dominante (alimentos, exercícios, sintomas, vitaminas)
-3. **Agrupe títulos similares** por estrutura abstrata (ex: “Gatilho + Problema + Número + Solução”)
-4. **Calcule métricas globais:**
-   - Comprimento em caracteres e palavras (média, mediana, min, max)
-   - Frequência e percentual de cada elemento estrutural
-   - Ocorrências de power words
-5. **Classifique padrões:**
-   - Apenas inclua padrões com ≥ 6 ocorrências (≥ 12%)
-   - Outros padrões menores entram em `oportunidades_fracas`
-6. **Selecione as 3 melhores estruturas** (por outlierScore médio)
-7. **Gere o insight geral**, resumindo os achados de maior valor.
-
----
-
-## 🧾 Saída esperada (JSON estrito)
-
-```json
-{
-  "nicho": "string",
-  "amostras": 50,
-  "estatisticas_texto": {
-    "caracteres": { "media": 0, "mediana": 0, "min": 0, "max": 0 },
-    "palavras": { "media": 0, "mediana": 0, "min": 0, "max": 0 }
-  },
-  "padroes_estruturais": [
-    {
-      "ranking": 1,
-      "padrao": "Gatilho emocional + Problema + Número + Solução",
-      "descricao": "Usa gatilho de alerta seguido de número e promessa concreta.",
-      "frequencia": 0,
-      "percentual": 0,
-      "outlierScoreMedio": 0,
-      "scoreFinalMedio": 0,
-      "exemplos": ["...", "..."],
-      "elementosChave": ["gatilho", "numero", "beneficio"],
-      "diretriz": "Abra com um alerta ('ATENÇÃO', 'WARNING'), adicione um número e conclua com benefício específico.",
-      "por_que_funciona": "Combina urgência e clareza, ativando o cérebro de sobrevivência e oferecendo recompensa imediata."
-    }
-  ],
-  "elementos_estruturais": {
-    "usa_numeros": { "contagem": 0, "percentual": 0 },
-    "usa_parenteses": { "contagem": 0, "percentual": 0 },
-    "usa_dois_pontos": { "contagem": 0, "percentual": 0 },
-    "usa_caps": { "contagem": 0, "percentual": 0 },
-    "usa_aspas": { "contagem": 0, "percentual": 0 },
-    "usa_interrogacao": { "contagem": 0, "percentual": 0 },
-    "listas_topX": { "contagem": 0, "percentual": 0 }
-  },
-  "gatilhos": [
-    { "nome": "curiosidade", "contagem": 0, "percentual": 0, "exemplos": ["..."] },
-    { "nome": "medo", "contagem": 0, "percentual": 0, "exemplos": ["..."] },
-    { "nome": "autoridade", "contagem": 0, "percentual": 0, "exemplos": ["..."] },
-    { "nome": "urgência", "contagem": 0, "percentual": 0, "exemplos": ["..."] },
-    { "nome": "prova_social", "contagem": 0, "percentual": 0, "exemplos": ["..."] }
-  ],
-  "power_words": [
-    { "termo": "warning", "contagem": 0 },
-    { "termo": "foods", "contagem": 0 },
-    { "termo": "after", "contagem": 0 },
-    { "termo": "fix", "contagem": 0 }
-  ],
-  "oportunidades_fracas": [
-    { "padrao": "Perguntas retóricas sobre sintomas", "contagem": 0 }
-  ],
-  "insights_gerais": {
-    "estrutura_mais_comum": "string",
-    "outlierScore_mais_alto": 0,
-    "elemento_mais_recorrente": "string",
-    "power_word_top": "string",
-    "resumo": "1–2 frases sobre por que esses padrões funcionam psicologicamente."
-  }
-}
-]
+> [COLE AQUI O PROMPT POSITIVO]
 > ```
 >
 > **Como o prompt limita o retorno:**
@@ -249,120 +143,7 @@ return $input.all().slice(0, limit);
 > **Área para colar o prompt usado:**
 >
 > ```
-> [## System
-Você é um **Especialista em Engenharia de Conteúdo e Psicologia do Click**, especializado em **diagnosticar títulos ineficazes**.  
-Seu papel é identificar **erros estruturais**, **ausência de gatilhos** e **padrões que reduzem o desempenho** com base em evidências observáveis.  
-Você trabalha **apenas com dados reais**, sem inferir métricas externas (CTR, watchtime etc.).  
-Sua resposta deve ser **JSON válido e parseável**.
-
----
-
-## User
-Analise os **quantidade títulos de pior performance** do nicho: `nicho`.
-
-### 📋 Dados recebidos
-Cada item contém:
-- **ID**  
-- **Título** (ou "Titulo ")  
-- **outlierScore** (métrica de destaque)  
-- **Score Final** (0–100)  
-- **Flags** (metadados de oportunidade)
-
----
-
-## 🎯 Objetivo
-Gerar um **raio-x dos erros recorrentes** nos títulos de baixa performance, revelando:
-1. **Estruturas ineficazes ou genéricas**
-2. **Ausência de gatilhos e power words**
-3. **Problemas de formato e clareza**
-4. **Padrões linguísticos associados a baixo desempenho**
-5. **Oportunidades de reescrita e ajuste estrutural**
-
----
-
-## Processo
-
-1. **Selecione os títulos de pior performance**
-   - Use os *quantidade* com menor outlierScore.
-2. **Analise cada título** para identificar:
-   - Falta de gatilho, número, promessa ou especificador.
-   - Frases genéricas, vagas ou sem diferencial emocional.
-   - Estruturas extensas, confusas ou desbalanceadas.
-   - Uso excessivo de palavras fracas (ex: “coisa”, “importante”, “veja”).
-   - Falta de foco (mistura de múltiplas ideias).
-3. **Agrupe títulos por padrão negativo:**
-   - Ex: “Sem gatilho + promessa vaga” ou “Informativo genérico sem emoção”.
-4. **Calcule estatísticas globais:**
-   - Comprimento médio em caracteres e palavras.
-   - Frequência de ausência de elementos (sem número, sem gatilho, etc.).
-   - Ocorrência de power words fracas.
-5. **Classifique os padrões:**
-   - Apenas inclua padrões negativos com ≥ 6 ocorrências (≥ 12%).
-   - Os menos recorrentes entram em `anomalias`.
-6. **Gere recomendações curtas e diretas** para corrigir os erros.
-
----
-
-## 🧾 Saída esperada (JSON estrito)
-
-```json
-{
-  "nicho": "string",
-  "amostras": 50,
-  "estatisticas_texto": {
-    "caracteres": { "media": 0, "mediana": 0, "min": 0, "max": 0 },
-    "palavras": { "media": 0, "mediana": 0, "min": 0, "max": 0 }
-  },
-  "padroes_negativos": [
-    {
-      "ranking": 1,
-      "padrao": "Sem gatilho + Promessa vaga",
-      "descricao": "Títulos que não despertam emoção nem comunicam benefício concreto.",
-      "frequencia": 0,
-      "percentual": 0,
-      "outlierScoreMedio": 0,
-      "scoreFinalMedio": 0,
-      "exemplos": ["...", "..."],
-      "problemas_comuns": [
-        "Falta de emoção",
-        "Sem número ou benefício específico",
-        "Palavras genéricas"
-      ],
-      "recomendacao": "Adicionar gatilho emocional e promessa clara de transformação.",
-      "impacto_estimado": "reduz engajamento inicial por falta de estímulo visual e emocional"
-    }
-  ],
-  "elementos_estruturais": {
-    "sem_numero": { "contagem": 0, "percentual": 0 },
-    "sem_gatilho": { "contagem": 0, "percentual": 0 },
-    "sem_promessa": { "contagem": 0, "percentual": 0 },
-    "muito_longo": { "contagem": 0, "percentual": 0 },
-    "titulo_confuso": { "contagem": 0, "percentual": 0 },
-    "usa_palavras_fracas": { "contagem": 0, "percentual": 0 }
-  },
-  "power_words_fracas": [
-    { "termo": "coisa", "contagem": 0 },
-    { "termo": "importante", "contagem": 0 },
-    { "termo": "veja", "contagem": 0 },
-    { "termo": "entenda", "contagem": 0 }
-  ],
-  "gatilhos_ausentes": [
-    { "nome": "curiosidade", "faltando_em": 0, "percentual": 0 },
-    { "nome": "urgência", "faltando_em": 0, "percentual": 0 },
-    { "nome": "autoridade", "faltando_em": 0, "percentual": 0 },
-    { "nome": "prova_social", "faltando_em": 0, "percentual": 0 }
-  ],
-  "anomalias": [
-    { "padrao": "Título excessivamente técnico", "ocorrencias": 0 },
-    { "padrao": "Mistura de dois temas sem conexão", "ocorrencias": 0 }
-  ],
-  "insights_gerais": {
-    "erro_mais_comum": "string",
-    "elemento_mais_ausente": "string",
-    "estrutura_mais_ineficaz": "string",
-    "resumo": "1–2 frases diretas sobre o que mais compromete a performance dos títulos."
-  }
-}]
+> [COLE AQUI O PROMPT NEGATIVO]
 > ```
 >
 > **Como o prompt limita o retorno:**
@@ -439,11 +220,15 @@ Gerar um **raio-x dos erros recorrentes** nos títulos de baixa performance, rev
 
 ---
 
-## ✅ Resultado Final da Parte 1
+## ✅ Resultado Final da Parte 2
 
 **Input:** Títulos extraídos da planilha *Dados ordenados*.
 **Output:** Análises positiva e negativa em formato JSON armazenadas na aba *Identificação de padrões*.
 **Próxima Etapa:** Consumir esses dados para gerar insights ou roteiros automatizados.
+
+---
+
+Posso agora gerar a **Parte 3** com o mesmo padrão (mantendo referências e sequência correta). Deseja que eu continue?
 
 
 
