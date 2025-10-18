@@ -51,7 +51,7 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Fluxointeiro.jpg) 
 
-🔗 [Ver documentação completa da Parte 1 →](/Tratamento%20de%20Dados/)
+🔗 [Ver documentação completa da Parte 2 →](/An%C3%A1lise%20e%20Identifica%C3%A7%C3%A3o%20de%20padr%C3%B5es/)
 
 
 ---
@@ -92,7 +92,7 @@ Esta automação gera:
 ![Fluxo Completo](./Imagens/automacao3.jpg) 
 
 
-🔗 [Ver documentação completa da Parte 3 →](./Desenvolvimento%20de%20Ideias/README.md)
+🔗 [Ver documentação completa da Parte 3 →](/Desenvolvimento%20de%20Ideias/)
 
 ---
 
