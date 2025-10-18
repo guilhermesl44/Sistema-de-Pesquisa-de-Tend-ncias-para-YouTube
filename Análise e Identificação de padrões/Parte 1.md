@@ -1,117 +1,90 @@
-
----
-
-# 🧠  Parte 1 — Identificação de Padrões de Títulos
+# Parte 1: Identificação de Padrões de Performance de Títulos
 
 ## 📋 Visão Geral
 
-Esta etapa da automação é responsável por identificar **padrões estruturais e linguísticos** nos títulos de vídeos do nicho analisado.
-Ela funciona em **duas análises paralelas**:
-
-1. **Análise Positiva** → detecta padrões **comuns entre os títulos de melhor desempenho**, revelando estruturas replicáveis.
-2. **Análise Negativa** → identifica padrões **ineficientes ou recorrentes entre os títulos de pior desempenho**, mostrando o que deve ser evitado.
-
-O objetivo é gerar uma base sólida de **aprendizado automático sobre o estilo do nicho**, entregando dois blocos JSON detalhados (`TituloPositivo` e `TituloNegativo`) que alimentarão os próximos módulos da automação (geração e avaliação de ideias).
+Essa automação realiza a **análise comparativa de títulos** (positivos e negativos) a partir de dados obtidos de uma planilha Google Sheets.
+O objetivo é **identificar padrões estruturais, gatilhos emocionais e deficiências linguísticas**, consolidando resultados em formato JSON para uso em etapas posteriores do pipeline.
 
 ---
 
 ## 🔄 Fluxo de Execução
 
-O processo segue esta sequência lógica:
-
-1. 🔁 **Trigger manual (`When clicking 'Execute workflow'`)** – dispara a execução da automação.
-2. 📊 **Leitura de dados (Google Sheets)** – obtém os títulos brutos da aba `Dados ordenados`.
-3. 🧩 **Normalização de campos (`Edit Fields`)** – corrige nomes e formatos de colunas (como `Titulo ` → `Titulo`).
-4. ⚖️ **Divisão em dois ramos**:
-
-   * **Ramo superior** → análise dos **melhores títulos** (top 50).
-   * **Ramo inferior** → análise dos **piores títulos** (bottom 50).
-5. 🧠 **Execução dos agentes LLM**:
-
-   * `AI Agent` (títulos bons)
-   * `AI Agent1` (títulos ruins)
-6. 🪄 **Geração de JSONs estruturados**:
-
-   * `Análise Positiva de Títulos`
-   * `Análise Negativa de Títulos`
-7. 🔗 **Merge das saídas** – combina as duas análises em um só fluxo.
-8. 📤 **Update no Google Sheets (`Update row in sheet2`)** – grava os resultados finais nas colunas correspondentes da aba `Identificação de padrões`.
-
----
-
-## ⚙️ Nós do Workflow
-
-### 🟢 **Trigger**
-
-**Nome:** `When clicking 'Execute workflow'`
-**Função:** executa manualmente o processo de análise.
-
----
-
-### 📗 **Get row(s) in sheet)**
-
-* **Fonte:** `Teste Dev IA Pleno`
-* **Aba:** `Dados ordenados`
-* **Campos utilizados:**
-
-  * `row_number`
-  * `Titulo` (com limpeza de espaço extra via node posterior)
-* **Credenciais:** `Google Sheets account`
-
-> Lê os títulos brutos que servirão de base para a análise estatística e semântica dos agentes.
-
----
-
-### 🧱 **Edit Fields**
-
-Normaliza e define campos para os próximos nós:
-
-```js
-Titulo = {{$json["Titulo "]}} // remove o espaço no nome da coluna
-row_number = {{$json.row_number}}
+```
+[Google Sheets Trigger] → [Get row(s) in sheet] → [Edit Fields] → 
+↳ (Caminho 1) → Code (JS3) → Aggregate → AI Agent → Edit Fields1
+↳ (Caminho 2) → Sort → Code (JS2) → Aggregate1 → AI Agent1 → Edit Fields2
+[Merge] → [Update row in sheet2]
 ```
 
-> Essa padronização é essencial para evitar erros de parsing e manter consistência na referência dos dados.
+---
+
+## 📦 Sequências da Parte 2
+
+> A automação se divide em **4 partes lógicas**, representando as sub-etapas da análise.
 
 ---
 
-### ⚖️ **Divisão dos Fluxos**
+### 🔹 Parte 1 – Leitura e Preparação dos Dados
 
-A partir do `Edit Fields`, o pipeline se divide em dois ramos independentes:
+#### 1. Google Sheets Trigger
 
-* **Ramo superior** → títulos **positivos (bons)**
-* **Ramo inferior** → títulos **negativos (ruins)**
+**Tipo:** `n8n-nodes-base.googleSheetsTrigger`
+**Função:** Inicia o fluxo automaticamente a cada 1 minuto.
+**Configuração:**
 
-Ambos seguem o mesmo padrão de pré-processamento, variando apenas a lógica de ordenação e o prompt usado no agente.
+* Modo de polling: `everyMinute`
+* Documento: Teste Dev IA Pleno
+* Aba: *Dados ordenados*
+  **Comportamento:** Detecta novas ou alteradas linhas e dispara o workflow.
+
+#### 2. Aggregate6
+
+**Tipo:** `n8n-nodes-base.aggregate`
+**Função:** Agrupa dados brutos vindos do trigger antes da leitura detalhada.
+
+#### 3. Get row(s) in sheet
+
+**Tipo:** `n8n-nodes-base.googleSheets`
+**Função:** Busca as linhas ativas na aba *Dados ordenados* do documento.
+**Credenciais:** Google Sheets account.
+
+#### 4. Edit Fields
+
+**Tipo:** `n8n-nodes-base.set`
+**Função:** Cria campos padronizados para uso nos ramos seguintes.
+**Campos:**
+
+* `Titulo` ← coluna "Titulo "
+* `row_number` ← coluna de índice.
 
 ---
 
-### 🔹 Ramo 1 — Títulos Positivos
+### 🔹 Parte 2 – Análise Positiva (Top Títulos)
 
-#### ① Code in JavaScript3
+#### 1. Code in JavaScript3
 
-Limita o conjunto analisado:
+**Tipo:** `n8n-nodes-base.code`
+**Função:** Limita os dados aos 50 primeiros itens.
 
 ```js
 const limit = 50;
 return $input.all().slice(0, limit);
 ```
 
-#### ② Aggregate
+#### 2. Aggregate
 
-Compacta os dados e mantém apenas o campo `Titulo`.
+**Tipo:** `n8n-nodes-base.aggregate`
+**Função:** Agrupa a coluna `Titulo` para envio à IA.
 
-#### ③ OpenAI Chat Model
+#### 3. AI Agent
 
-* Modelo: `gpt-4.1-mini`
-* Credenciais: `Guilherme`
+**Tipo:** `@n8n/n8n-nodes-langchain.agent`
+**Função:** Analisa os títulos de melhor performance com base no prompt de diagnóstico positivo.
 
-#### ④ AI Agent — “Analisador de Títulos de Alta Performance”
-
-Executa o seguinte prompt:
-
-```markdown
-## System
+> **Área para colar o prompt usado:**
+>
+> ```
+> [## System
 Você é um **Especialista em Engenharia de Conteúdo, Psicologia do Click e Modelagem de Estruturas Virais**.  
 Seu papel é analisar **títulos de vídeos de alta performance** e **identificar padrões replicáveis** com base em evidências observáveis.  
 Você deve combinar **análise qualitativa (estrutural)** e **quantitativa (estatística)**, sem inferir dados externos (CTR, watchtime etc.).  
@@ -163,9 +136,9 @@ Gerar um **raio-x completo dos títulos vencedores**, revelando:
 6. **Selecione as 3 melhores estruturas** (por outlierScore médio)
 7. **Gere o insight geral**, resumindo os achados de maior valor.
 
-```
+---
 
-📤 **Saída esperada (JSON estrito):**
+## 🧾 Saída esperada (JSON estrito)
 
 ```json
 {
@@ -223,48 +196,60 @@ Gerar um **raio-x completo dos títulos vencedores**, revelando:
     "resumo": "1–2 frases sobre por que esses padrões funcionam psicologicamente."
   }
 }
-```
+]
+> ```
+>
+> **Como o prompt limita o retorno:**
+>
+> * Exige JSON estrito e parseável.
+> * Delimita a análise a padrões observáveis (sem inferir métricas).
+> * Garante padronização de campos para uso automatizado.
 
-#### ⑤ Edit Fields1
+#### 4. OpenAI Chat Model
 
-Armazena a saída em um campo intermediário:
+**Tipo:** `@n8n/n8n-nodes-langchain.lmChatOpenAi`
+**Modelo:** `gpt-4.1-mini`
+**Função:** Fornece a capacidade LLM para o AI Agent.
+**Credenciais:** OpenAI API (Guilherme).
 
-```js
-Análise Positiva de Titulos = {{$json.output}}
-```
+#### 5. Edit Fields1
+
+**Tipo:** `n8n-nodes-base.set`
+**Função:** Armazena o output JSON gerado pela análise positiva no campo `Análise Positiva de Títulos`.
 
 ---
 
-### 🔸 Ramo 2 — Títulos Negativos
+### 🔹 Parte 3 – Análise Negativa (Títulos de Baixa Performance)
 
-#### ① Sort
+#### 1. Sort
 
-Ordena os dados em ordem **decrescente** de `row_number` (ou da métrica desejada).
+**Tipo:** `n8n-nodes-base.sort`
+**Função:** Ordena as linhas por `row_number` em ordem decrescente.
 
-#### ② Code in JavaScript2
+#### 2. Code in JavaScript2
 
-Limita o conjunto a **50 itens**:
+**Tipo:** `n8n-nodes-base.code`
+**Função:** Limita os dados aos 50 primeiros itens para análise.
 
 ```js
 const limit = 50;
 return $input.all().slice(0, limit);
 ```
 
-#### ③ Aggregate1
+#### 3. Aggregate1
 
-Reduz a entrada apenas ao campo `Titulo`.
+**Tipo:** `n8n-nodes-base.aggregate`
+**Função:** Agrupa a coluna `Titulo` para enviar ao agente de análise negativa.
 
-#### ④ OpenAI Chat Model1
+#### 4. AI Agent1
 
-* Modelo: `gpt-4.1-mini`
-* Credenciais: `Guilherme`
+**Tipo:** `@n8n/n8n-nodes-langchain.agent`
+**Função:** Executa a análise dos títulos de pior performance.
 
-#### ⑤ AI Agent1 — “Diagnóstico de Títulos Ineficazes”
-
-Executa o prompt:
-
-```markdown
-## System
+> **Área para colar o prompt usado:**
+>
+> ```
+> [## System
 Você é um **Especialista em Engenharia de Conteúdo e Psicologia do Click**, especializado em **diagnosticar títulos ineficazes**.  
 Seu papel é identificar **erros estruturais**, **ausência de gatilhos** e **padrões que reduzem o desempenho** com base em evidências observáveis.  
 Você trabalha **apenas com dados reais**, sem inferir métricas externas (CTR, watchtime etc.).  
@@ -315,9 +300,10 @@ Gerar um **raio-x dos erros recorrentes** nos títulos de baixa performance, rev
    - Apenas inclua padrões negativos com ≥ 6 ocorrências (≥ 12%).
    - Os menos recorrentes entram em `anomalias`.
 6. **Gere recomendações curtas e diretas** para corrigir os erros.
-```
 
-📤 **Saída esperada (JSON estrito):**
+---
+
+## 🧾 Saída esperada (JSON estrito)
 
 ```json
 {
@@ -376,76 +362,88 @@ Gerar um **raio-x dos erros recorrentes** nos títulos de baixa performance, rev
     "estrutura_mais_ineficaz": "string",
     "resumo": "1–2 frases diretas sobre o que mais compromete a performance dos títulos."
   }
-}
+}]
+> ```
+>
+> **Como o prompt limita o retorno:**
+>
+> * Foca em identificar erros estruturais sem métricas externas.
+> * Exige saída JSON padronizada com padrões negativos.
+> * Garante consistência com a análise positiva para comparação automática.
 
-```
+#### 5. OpenAI Chat Model1
 
-#### ⑥ Edit Fields2
+**Tipo:** `@n8n/n8n-nodes-langchain.lmChatOpenAi`
+**Modelo:** `gpt-4.1-mini`
+**Função:** Modelo de linguagem conectado ao AI Agent1.
 
-Armazena a saída intermediária:
+#### 6. Edit Fields2
 
-```js
-Análise Negativa de Titulos = {{$json.output}}
-```
-
----
-
-### 🔗 **Merge**
-
-Tipo: `combineByPosition`
-
-> Junta a análise positiva (porta 0) e negativa (porta 1) lado a lado, mantendo correspondência posicional.
-
----
-
-### 📤 **Update row in sheet2**
-
-Atualiza a aba **IDentificação de padrões** com:
-
-```js
-TituloPositivo = {{$json["Análise Positiva de Titulos"]}}
-TituloNegativo = {{$json["Análise Negativa de Titulos"]}}
-row_number = 2
-```
-
-* **Documento:** `Teste Dev IA Pleno`
-* **Aba destino:** `IDentificação de padrões`
-* **Credenciais:** `Google Sheets account`
+**Tipo:** `n8n-nodes-base.set`
+**Função:** Registra o output JSON da análise negativa no campo `Análise Negativa de Títulos`.
 
 ---
 
-## 📊 Estrutura Final no Sheets
+### 🔹 Parte 4 – Unificação e Escrita dos Resultados
 
-| row_number | TituloPositivo            | TituloNegativo        | Thumb | Roteiro | Lacunas |
-| ---------- | ------------------------- | --------------------- | ----- | ------- | ------- |
-| 2          | JSON (padrões vencedores) | JSON (padrões fracos) | —     | —       | —       |
+#### 1. Merge
 
-> Essa etapa não preenche as colunas `Thumb`, `Roteiro` e `Lacunas`.
-> Elas serão usadas nas partes seguintes (Bloco 2 e Bloco 3).
+**Tipo:** `n8n-nodes-base.merge`
+**Função:** Combina as duas análises (positiva e negativa) por posição para gerar um único objeto.
+**Configuração:** `combineByPosition`.
+
+#### 2. Update row in sheet2
+
+**Tipo:** `n8n-nodes-base.googleSheets`
+**Função:** Atualiza a aba *Identificação de padrões* com os campos:
+
+* `TituloPositivo` ← Análise Positiva de Títulos
+* `TituloNegativo` ← Análise Negativa de Títulos
+* `row_number` para referência de linha.
+  **Credenciais:** Google Sheets account.
 
 ---
 
-## 🎯 Interpretação e Benefícios
+## 📊 Estrutura Final / Outputs Gerados
 
-| Tipo de Análise | Propósito                                        | Resultado                                 |
-| --------------- | ------------------------------------------------ | ----------------------------------------- |
-| **Positiva**    | Descobrir o que torna os títulos virais          | Estruturas e gatilhos de alta performance |
-| **Negativa**    | Identificar erros recorrentes e promessas fracas | Diagnóstico e recomendações práticas      |
+| Campo          | Descrição                                                     | Origem         |
+| -------------- | ------------------------------------------------------------- | -------------- |
+| TituloPositivo | JSON com padrões estruturais e gatilhos de melhor performance | AI Agent       |
+| TituloNegativo | JSON com erros recorrentes e ausência de gatilhos             | AI Agent1      |
+| row_number     | Índice da linha na planilha original                          | Sheets Trigger |
 
-Essas duas saídas são os **pilares analíticos** do pipeline — todos os agentes seguintes (gerador de ideias, avaliador, roteirista e designer de thumb) usam esses JSONs como insumo.
+---
+
+## 🎯 Interpretação / Uso dos Resultados
+
+* Permite comparar automaticamente títulos positivos vs negativos.
+* Fornece bases para recomendações estruturais e criação de novos títulos.
+* Resultados ficam armazenados no Google Sheets para consulta e integração posterior.
 
 ---
 
 ## ⚙️ Configurações Técnicas
 
-* **Modelo LLM:** `gpt-4.1-mini`
-* **Formato de saída:** JSON **parseável e sem Markdown**
-* **Limite de itens por análise:** `50`
-* **Método de merge:** `combineByPosition`
-* **Atualização de linha:** `row_number = 2`
-* **Campos sensíveis a nomes:** `"Titulo "` (com espaço) deve ser normalizado para `"Titulo"`
+* **Trigger:** execução automática a cada 1 minuto.
+* **Modelo LLM:** GPT-4.1-mini (OpenAI Chat).
+* **Credenciais:** Google Sheets OAuth2 e OpenAI API.
+* **Limite de itens:** 50 por tipo de análise.
+* **Formatação:** JSON parseável com estrutura padronizada.
 
 ---
 
-quer que eu siga agora com a **Parte 2 · Bloco 2 — Geração, Avaliação e Explicação de Ideias** no mesmo estilo (com os três agentes + benchmarks + integração de lacunas)?
+## 🔄 Integração com Outras Partes
+
+**Input (vindo da Parte 1):** linhas ordenadas com títulos e métricas.
+**Output (para Parte 3):** planilha atualizada com padrões positivos e negativos para uso em modelagem de roteiros ou visualizações posteriores.
+
+---
+
+## ✅ Resultado Final da Parte 1
+
+**Input:** Títulos extraídos da planilha *Dados ordenados*.
+**Output:** Análises positiva e negativa em formato JSON armazenadas na aba *Identificação de padrões*.
+**Próxima Etapa:** Consumir esses dados para gerar insights ou roteiros automatizados.
+
+
 
