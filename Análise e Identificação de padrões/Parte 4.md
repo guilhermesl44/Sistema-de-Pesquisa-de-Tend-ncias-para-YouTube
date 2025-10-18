@@ -1,5 +1,8 @@
 # 🚀 Parte 4 — Normalização de Oportunidades (n-gramas → lacunas temáticas)
 
+![Fluxo Completo](./Imagens/automacao2pt4.jpg)
+
+
 ## 📌 Objetivo
 
 Consolidar **padrões raros-fortes de n-gramas** extraídos dos **títulos da própria base** em **lacunas temáticas acionáveis**, com contexto, métricas e **ranking por score estimado**.
