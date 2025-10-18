@@ -1,5 +1,7 @@
 # Parte 2: Cálculo de Benchmarks Estatísticos
 
+![Fluxo Completo](./Imagens/automacao1pt2.jpg)
+
 ## 📋 Visão Geral
 
 Esta segunda parte do workflow é responsável por **calcular benchmarks estatísticos dinâmicos** baseados nos dados coletados na Parte 1. Processa todos os vídeos do nicho e gera estatísticas completas (média, mediana, percentis, desvio padrão) para cada métrica.
