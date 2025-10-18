@@ -47,8 +47,8 @@ Cada automação é independente, mas compartilha o mesmo **banco de dados no Go
 Realizar a coleta e padronização de dados vindos de planilhas, preparando-os para as análises posteriores.  
 Essa etapa inclui filtragem, separação entre títulos de alta e baixa performance e organização de colunas no formato esperado pelos agentes de IA.
 
-> *(inserir aqui imagem do fluxo da Parte 1)*  
-> 🖼️ **[Espaço reservado para imagem do fluxo 1]**
+
+> 🖼️ **![Fluxo Completo](./Imagens/fluxointeiro.jpg) **
 
 🔗 [Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/Parte1.md)
 
