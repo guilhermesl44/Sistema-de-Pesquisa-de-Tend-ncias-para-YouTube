@@ -2,214 +2,220 @@
 
 ## 📌 Objetivo
 
-1. **Descrever cada thumbnail** (dos 50 itens) em JSON padronizado com: composição, cores, texto detectado, elementos de destaque etc.
-2. **Comparar** (top vs. bottom) e **extrair padrões visuais** replicáveis (o que funciona) e anti-padrões (o que evitar).
-3. **Persistir** a descrição individual na aba **Dados ordenados** (`DescriçãoThumb`) e o relatório consolidado de padrões na aba **IDentificação de padrões** (`Thumb`).
+Esta parte do workflow lê **exatamente os 50 primeiros registros** da aba **“Dados ordenados”**, verifica se cada linha **já possui descrição de thumbnail**, gera a **descrição técnica** (quando ausente) e por fim **consolida padrões visuais** a partir dessas descrições, salvando o resultado na aba **“IDentificação de padrões”** (linha 2).
 
 ---
 
-## 🔄 Fluxo (alto nível)
+## 🔄 Fluxo de Execução
 
-1. **Ler** linhas da aba `Dados ordenados`.
-2. **Loop** item a item (até 50):
-
-   * Se `DescriçãoThumb` **está vazia** → **analisar** a imagem via Vision LLM → **salvar** a descrição.
-   * Se **já existe**, **pular** a análise e seguir.
-3. **Consolidar** as descrições (Aggregate) → **Agente de Padrões Visuais** gera JSON comparativo **top vs. bottom** → **salvar** na aba `IDentificação de padrões` (coluna `Thumb`).
-
----
-
-## 🧩 Nós e Configuração
-
-### 1) Trigger
-
-* **Node:** `When clicking 'Execute workflow'`
-* Dispara a execução manual.
-
----
-
-### 2) Leitura & Normalização
-
-* **Node:** `Get row(s) in sheet1`
-
-  * **Doc:** `Teste Dev IA Pleno`
-  * **Aba:** `Dados ordenados`
-* **Node:** `Edit Fields3`
-
-  * Define campos usados adiante:
-
-    * `row_number = {{$json.row_number}}`
-    * **(CORREÇÃO 1)** Renomeie o campo sem nome para algo como **`ThumbUrl`** e atribua:
-
-      ```js
-      ThumbUrl = {{$json.Thumb}}
-      ```
-
-      > Hoje o `name` está vazio e isso pode quebrar o fluxo em execuções posteriores.
+```
+Manual Trigger
+→ Get row(s) in sheet1 (Dados ordenados)
+→ Edit Fields3 (mapeia URL da thumb em uma chave vazia "")
+→ Code in JavaScript (limita a 50 itens)
+→ Loop Over Items2 (iterate)
+   ├─ If (DescriçãoThumb vazia?)
+   │   └─ Analyze image (descreve a thumbnail) → Wait (20s) → Update row in sheet (grava DescriçãoThumb)
+   └─ (se já tiver) segue adiante
+→ Aggregate2 (agrega items)
+→ Get row(s) in sheet2 (Dados ordenados)
+→ Edit Fields4 (seleciona DescriçãoThumb + row_number)
+→ Code in JavaScript1 (limita a 50)
+→ Aggregate3 (agrega apenas DescriçãoThumb)
+→ AI Agent2 (compara TOP vs BOTTOM e extrai padrões)
+→ Update row in sheet1 (IDentificação de padrões!Thumb = output do AI Agent2)
+```
 
 ---
 
-### 3) Limite & Loop
+## 📦 Nós do Workflow (o que **de fato** acontece)
 
-* **Node:** `Code in JavaScript`
+### 1) **When clicking ‘Execute workflow’**
 
-  ```js
-  const limit = 50;
-  return $input.all().slice(0, limit);
-  ```
-* **Node:** `Loop Over Items2` (SplitInBatches)
-
-  * Itera item a item, permitindo atualizar a planilha a cada descrição analisada.
+**Tipo:** `manualTrigger`
+Disparo manual do fluxo.
 
 ---
 
-### 4) “Já tem descrição?” (desvio condicional)
+### 2) **Get row(s) in sheet1**
 
-* **Node:** `If`
+**Tipo:** `googleSheets (Read)`
 
-  * Condição: **`DescriçãoThumb` está vazia**
-  * Se **vazio** → vai para **Analyze image**
-  * Se **não vazio** → volta ao **Loop Over Items2** (próximo item)
-
-> Garante idempotência: só analisa o que ainda não tem descrição.
+* **Documento:** `Teste Dev IA Pleno` (`1XlZTABwHA456bYCFRiS8BFLxynypmo65pXeBeRV1WkQ`)
+* **Aba:** **Dados ordenados** (`gid=304295346`)
+* Lê todas as linhas da aba e envia ao próximo nó.
 
 ---
 
-### 5) Análise da Thumbnail (por item)
+### 3) **Edit Fields3**
 
-* **Node:** `Analyze image` (OpenAI Vision)
+**Tipo:** `set`
+Cria duas propriedades no item:
 
-  * **Model:** `gpt-4o-mini`
-  * **Prompt:** *Especialista em Análise Visual…* (o que você colou)
-  * **Formato de saída exigido:**
+* `""` (chave de **nome vazio**) recebendo `{{$json.Thumb}}`
+* `row_number` recebendo `{{$json.row_number}}`
 
-    ```json
-    {
-      "descricao_detalhada": "...",
-      "tags_visuais": ["..."],
-      "cores_predominantes": ["..."],
-      "texto_detectado": "...",
-      "composicao": {
-        "enquadramento": "...",
-        "layout": "...",
-        "contraste": "...",
-        "elementos_destaque": ["..."]
-      },
-      "gancho_visual": "...",
-      "resumo_visual": "..."
-    }
-    ```
-  * **(CORREÇÃO 2 – CRÍTICA)** O campo `imageUrls` está vazio:
-
-    ```diff
-    - "imageUrls": "={{ $json[\"\"] }}",
-    + "imageUrls": "={{ $('Loop Over Items2').item.json.Thumb || $('Edit Fields3').item.json.ThumbUrl }}",
-    ```
-
-    > Assim garantimos que a URL venha do item atual do loop.
-
-* **Node:** `Wait` (20s)
-
-  * Dá tempo para a API responder e evita “race” na atualização do Sheets quando há variações de latência.
-  * Pode ser reduzido se o modelo responder rápido.
-
-* **Node:** `Update row in sheet`
-
-  * **Doc:** `Dados ordenados`
-  * **Matching:** `row_number`
-  * **Colunas gravadas:**
-
-    ```js
-    row_number = {{ $('Loop Over Items2').item.json.row_number }}
-    DescriçãoThumb = {{ $json.content }}   // conteúdo retornado pelo Vision
-    // (CORREÇÃO 3) evite escrever "Transcrição": "=" — remova ou deixe vazio.
-    ```
+> Observação: essa chave vazia `""` é usada adiante como **fonte de URL** da imagem.
 
 ---
 
-### 6) Consolidação & Padrões (comparativo top vs. bottom)
+### 4) **Code in JavaScript**
 
-> Após o loop, o fluxo alterna para o caminho de consolidação:
+**Tipo:** `code`
 
-* **Node:** `Aggregate2` → `Get row(s) in sheet2` → `Edit Fields4` → `Code in JavaScript1` → `Aggregate3`
+```js
+const limit = 50;
+return $input.all().slice(0, limit);
+```
 
-  * Esses nós **juntam todas as `DescriçãoThumb`** (dos 50 itens) num payload.
-  * **Dica:** Se você já possui a label “top” vs “bottom” por `ClassificaçãoGeral` ou por posição/score, agrupe no `Code in JavaScript1` para montar o JSON de entrada do agente exatamente assim:
-
-    ```json
-    {
-      "top_thumbnails": [ { ...descrição... }, ... ],
-      "bottom_thumbnails": [ { ...descrição... }, ... ]
-    }
-    ```
-
-* **Node:** `AI Agent2` (Analista de Padrões Visuais)
-
-  * **Model:** `gpt-4.1-mini`
-  * **Entrada esperada:** o JSON acima (top/bottom)
-  * **Saída exigida (padrões + anti-padrões):**
-
-    ```json
-    {
-      "padrões_visuais": {
-        "cores": { "top": [...], "bottom": [...], "diretriz": "...", "por_que_funciona": "..." },
-        "composicao": { ... },
-        "texto": { ... },
-        "elementos_destaque": { ... },
-        "expressões_ou_sujeitos": { ... }
-      },
-      "anti_padrões": ["...", "..."],
-      "insight_geral": "..."
-    }
-    ```
-
-* **Node:** `Update row in sheet1`
-
-  * **Doc:** `IDentificação de padrões`
-  * **Matching:** `row_number = 2`
-  * **Coluna gravada:**
-
-    ```js
-    Thumb = {{ $json.output }} // JSON consolidado de padrões visuais
-    ```
+Limita o fluxo aos **50 primeiros itens**.
 
 ---
 
-## 🗂️ Colunas Atualizadas
+### 5) **Loop Over Items2**
 
-* **Aba `Dados ordenados`**
-
-  * `DescriçãoThumb` (por vídeo) → JSON com a descrição visual padronizada.
-
-* **Aba `IDentificação de padrões`**
-
-  * `Thumb` (linha 2) → JSON consolidado de **padrões e anti-padrões visuais**.
+**Tipo:** `splitInBatches`
+Itera registro a registro (em lotes) sobre **esses 50 itens**.
 
 ---
 
-## ✅ Boas Práticas & Notas
+### 6) **If**
 
-* **Idempotência**: o `If` impede reprocessar thumbs já descritas.
-* **Limite**: `Code in JavaScript` restringe a 50 itens (ajuste conforme sua rotina).
-* **Campo “Transcrição”**: atualmente está sendo atualizado com `"="`. Se não for usar aqui, **remova** do `Update row in sheet`.
-* **Erros comuns**:
+**Tipo:** `if`
+Condição: verifica se **`DescriçãoThumb` está vazia** (usa o valor vindo do *Get row(s) in sheet1*).
 
-  * `imageUrls` vazio → **corrigido** acima.
-  * Campo **sem nome** no `Set (Edit Fields3)` → nomeie como `ThumbUrl` para evitar side effects.
-* **Taxa/Latência**: O `Wait` é conservador. Se bater limite de requests, aumente o batch ou o `Wait`.
+* **Verdadeiro (vazia)** → chama **Analyze image**
+* **Falso (já preenchida)** → **pula** a análise e retorna ao loop
 
 ---
 
-## 🧪 Teste rápido (passo a passo)
+### 7) **Analyze image**
 
-1. Marque 1–2 linhas da aba **Dados ordenados** com `DescriçãoThumb` vazia e `Thumb` com URL pública.
-2. Rode o workflow:
+**Tipo:** `openAi (Vision / analyze)` — **Modelo:** `gpt-4o-mini`
 
-   * Veja o `Analyze image` retornando `content` JSON.
-   * Confira no `Update row in sheet` o campo `DescriçãoThumb` preenchido.
-3. Após os 50 itens processados, verifique na aba **IDentificação de padrões** a coluna `Thumb` (linha 2) com o JSON consolidado.
+* **Prompt:** persona de **Análise Visual** (descreve tecnicamente a thumbnail).
+* **imageUrls:** `={{ $json[""] }}` → usa a URL gravada na **chave vazia** `""` criada no *Edit Fields3*.
+* **Saída esperada:** JSON com `descricao_detalhada`, `tags_visuais`, `cores_predominantes`, `texto_detectado`, `composicao`, `gancho_visual`, `resumo_visual`.
+
+> Importante: este nó **não reescreve** nada sozinho — apenas **gera** a descrição.
 
 ---
 
-quer que eu siga com a **Parte 3 — Geração de Ideias, Avaliação (score), Roteiro e Brief de Thumb** (com a orquestração entre os três agentes e benchmarks) no mesmo formato?
+### 8) **Wait**
+
+**Tipo:** `wait`
+Espera **20 segundos** antes de escrever no Sheets (buffer para processamento/limites de API).
+
+---
+
+### 9) **Update row in sheet**
+
+**Tipo:** `googleSheets (Update)` — **Aba:** **Dados ordenados**
+
+* **Matching:** `row_number`
+* **Escreve:**
+
+  * `DescriçãoThumb = {{$json.content}}` (conteúdo do Analyze image)
+  * `Transcrição = "="` (literal, conforme configurado)
+
+> Resultado: cada linha que **não tinha** descrição passa a ter **DescriçãoThumb** preenchida.
+
+---
+
+### 10) **Aggregate2**
+
+**Tipo:** `aggregate (aggregateAllItemData)`
+Agrega os itens do loop para seguir em bloco.
+
+---
+
+### 11) **Get row(s) in sheet2**
+
+**Tipo:** `googleSheets (Read)` — **Aba:** **Dados ordenados**
+Lê novamente a aba com os **dados já atualizados** (incluindo as descrições recém-escritas).
+
+---
+
+### 12) **Edit Fields4**
+
+**Tipo:** `set`
+Seleciona apenas:
+
+* `DescriçãoThumb = {{$json["DescriçãoThumb"]}}`
+* `row_number = {{$json.row_number}}`
+
+---
+
+### 13) **Code in JavaScript1**
+
+**Tipo:** `code`
+
+```js
+const limit = 50;
+return $input.all().slice(0, limit);
+```
+
+Mantém apenas **50** itens para a etapa de padrões.
+
+---
+
+### 14) **Aggregate3**
+
+**Tipo:** `aggregate`
+Agrega **somente** o campo `DescriçãoThumb` para compor o input do próximo agente.
+
+---
+
+### 15) **AI Agent2**
+
+**Tipo:** `agent` + **OpenAI Chat Model2** (`gpt-4.1-mini`)
+
+* Recebe **apenas** a coleção de `DescriçãoThumb` (agregada).
+* **System Message:** instruções para **comparar descrições** e **extrair padrões visuais** (cores, composição, texto, elementos de destaque, expressões/sujeitos), **anti-padrões** e **insight geral**.
+* **Saída:** JSON estruturado em `padrões_visuais`, `anti_padrões`, `insight_geral`.
+
+---
+
+### 16) **Update row in sheet1**
+
+**Tipo:** `googleSheets (Update)` — **Aba:** **IDentificação de padrões** (`gid=1109606750`)
+
+* **Matching:** `row_number = 2`
+* **Escreve:** `Thumb = {{$json.output}}`
+
+  * Ou seja, salva **o JSON final de padrões visuais** retornado pelo *AI Agent2* **na linha 2**, coluna **Thumb** da aba **IDentificação de padrões**.
+
+---
+
+## 🧪 O que é verificado/limitado (sem invenção)
+
+* **Teto de processados:** 50 itens (dois nós `code` com `slice(0, 50)` garantem isso).
+* **Condição de criação de descrição:** só gera **DescriçãoThumb** se **estiver vazia**.
+* **Onde vai o resultado do agente de padrões:** **apenas** na **linha 2** da aba **IDentificação de padrões**, coluna **Thumb**.
+* **Fonte da URL de imagem:** vem do campo **Thumb** original, mapeado para a **chave vazia** `""` (truque proposital), lida por `Analyze image` em `{{$json[""]}}`.
+
+---
+
+## 🗂️ Planilhas envolvidas
+
+* **Dados ordenados (gid=304295346)**
+
+  * Fonte dos 50 primeiros registros
+  * Recebe **DescriçãoThumb** (e “Transcrição” como `"="`)
+* **IDentificação de padrões (gid=1109606750)**
+
+  * Recebe **o JSON de padrões visuais** (coluna **Thumb**, **linha 2**)
+
+---
+
+## ✅ Resultado
+
+* As **50 thumbnails** (no máximo) são checadas.
+* Se a descrição estiver vazia, o fluxo **gera e grava** `DescriçãoThumb`.
+* Em seguida, o agente consolida **padrões visuais top vs bottom** com base nas **descrições existentes**, e o **JSON final** é **salvo** na aba **IDentificação de padrões**, **linha 2 → coluna “Thumb”**.
+
+—
+
+*Observação:* este documento mantém o mesmo padrão de layout/explicação da parte anterior e descreve **somente o que o código faz de fato**, sem extrapolações. 
+
 
