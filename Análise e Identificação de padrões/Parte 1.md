@@ -1,6 +1,7 @@
 # Parte 1: Identificação de Padrões de Performance de Títulos
 
 ![Fluxo Completo](./Imagens/automacao2pt1.jpg)
+
 ## 📋 Visão Geral
 
 Essa automação realiza a **análise comparativa de títulos** (positivos e negativos) a partir de dados obtidos de uma planilha Google Sheets.
