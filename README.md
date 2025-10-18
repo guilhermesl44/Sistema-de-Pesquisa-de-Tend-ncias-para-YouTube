@@ -51,7 +51,7 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Fluxointeiro.jpg) 
 
-🔗 [Ver documentação completa da Parte 2 →](/An%C3%A1lise%20e%20Identifica%C3%A7%C3%A3o%20de%20padr%C3%B5es/)
+🔗 [Ver documentação completa da Parte 1 →](/An%C3%A1lise%20e%20Identifica%C3%A7%C3%A3o%20de%20padr%C3%B5es/)
 
 
 ---
@@ -69,7 +69,7 @@ O sistema identifica **estruturas narrativas, gatilhos emocionais, power words e
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Fluxointeiro2.jpg) 
 
-🔗 [Ver documentação completa da Parte 2 →](./Análise%20e%20Identificação%20de%20padrões/README.md)
+🔗 [Ver documentação completa da Parte 2 →](./Análise%20e%20Identificação%20de%20padrões/)
 
 ---
 
