@@ -51,7 +51,7 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Fluxointeiro.jpg) 
 
-🔗 [Ver documentação completa da Parte 1 →](#Tratamento-de-Dados)
+🔗 [Ver documentação completa da Parte 2 →](./Tratamento-de-Dados/Parte-1.md)
 
 ---
 
