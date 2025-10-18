@@ -48,7 +48,8 @@ Realizar a coleta e padronização de dados vindos de planilhas, preparando-os p
 Essa etapa inclui filtragem, separação entre títulos de alta e baixa performance e organização de colunas no formato esperado pelos agentes de IA.
 
 
-> 🖼️ **![Fluxo Completo](./Imagens/fluxointeiro.jpg) **
+> 🖼️ 
+![Fluxo Completo](./Imagens/fluxointeiro.jpg) 
 
 🔗 [Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/Parte1.md)
 
