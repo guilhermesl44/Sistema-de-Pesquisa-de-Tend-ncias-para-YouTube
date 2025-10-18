@@ -1,5 +1,7 @@
 # Parte 1: Coleta e Processamento de Dados do YouTube
 
+![Fluxo Completo](./Imagens/automacao1pt1.jpg)
+
 ## 📋 Visão Geral
 
 Esta primeira parte do workflow é responsável por **coletar dados brutos do YouTube, processar métricas e armazenar em Google Sheets** para análise posterior.
