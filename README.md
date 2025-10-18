@@ -97,8 +97,8 @@ Esta automação gera:
 
 ## 📊 Estrutura da Planilha (Google Sheets)
 
-> *(inserir aqui captura de tela da planilha principal)*  
-> 🖼️ **[Espaço reservado para imagem da planilha do projeto]**
+> 🖼️ 
+![Fluxo Completo](./Imagens/Planilhadosheets.jpg) 
 
 A planilha funciona como **hub central de dados** do sistema.  
 Cada aba representa uma fase do pipeline:
