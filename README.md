@@ -33,9 +33,6 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 
 ## ⚙️ Arquitetura do Sistema
 
-> *(inserir aqui imagem geral dos fluxos das 3 automações)*  
-> 🖼️ **[Espaço reservado para imagem do fluxo completo]**
-
 Cada automação é independente, mas compartilha o mesmo **banco de dados no Google Sheets**, permitindo continuidade entre análises e geração de conteúdo.
 
 ---
@@ -53,7 +50,7 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 > *(inserir aqui imagem do fluxo da Parte 1)*  
 > 🖼️ **[Espaço reservado para imagem do fluxo 1]**
 
-🔗 [Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/README.md)
+🔗 [Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/Parte1.md)
 
 ---
 
