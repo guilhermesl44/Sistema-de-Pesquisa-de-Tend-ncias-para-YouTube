@@ -1,5 +1,8 @@
 # ⚙️ Parte 3 — Análise de Estrutura e Gatilhos dos Roteiros
 
+![Fluxo Completo](./Imagens/automacao2pt3.jpg)
+
+
 ## 📌 Objetivo
 
 Ler **exatamente os 50 primeiros registros** da aba **“Dados ordenados”**, **verificar se a coluna `Transcrição` está vazia** e, quando vazia, **gerar uma análise estrutural do roteiro via IA** (com base na transcrição do vídeo). Em seguida, **agregar as análises** e produzir um **sumário de padrões narrativos** (via outro agente), gravando o resultado final em **“IDentificação de padrões” (linha 2, colunas `Roteiro` e `Thumb`= “=”)**. 
