@@ -1,247 +1,153 @@
-# Sistema-de-Pesquisa-de-Tend-ncias-para-YouTube
+# 🧠 Sistema de Pesquisa de Tendências para YouTube
 
-**# Resumo Workflow 
-
-
-![Fluxo Completo](./Imagens/Fluxointeiro.jpg)
-## 🔄 4 Partes
-
-### **Automação 1: Raspagem de Dados**
-Faz raspagem de vídeos do YouTube usando um actor do Apify. Recebe nicho, quantidade e filtro via formulário web, aguarda 10 minutos o processamento e salva ~50 vídeos com métricas calculadas (engagementRate, outlierScore, viewsPerDay, etc.) na planilha DADOSBRUTOS.
-
-**Tempo:** ~12 minutos
+> Projeto desenvolvido como parte de um processo seletivo técnico, com o objetivo de demonstrar domínio em automação de fluxos com **n8n**, integração com **Google Sheets**, uso de **IA generativa**, e aplicação prática de **engenharia de prompts**.
 
 ---
 
-### **Automação 2: Cálculo de Benchmarks**
-Processa todos os vídeos e calcula 13 estatísticas (média, mediana, desvio padrão, percentis P10-P99, etc.) para cada uma das 12 métricas. Cria uma tabela de referências estatísticas do nicho na aba BenchMark.
+## 📑 Índice
 
-**Tempo:** ~3 segundos
-
----
-
-### **Automação 3: Níveis de Referência**
-Transforma as estatísticas em 6 níveis de performance compreensíveis (Excepcional/Top 1%, Excelente/Top 5%, Muito Bom/Top 10%, Bom/Top 25%, Médio/Mediana, Abaixo da Média/Bottom 25%) e salva na aba ANÁLISE.
-
-**Tempo:** <1 segundo
-
----
-
-### **Automação 4: Ranking**
-Compara cada vídeo com os benchmarks, calcula um score composto (0-100) usando pesos para 7 métricas, classifica e marca flags especiais (topPerformer, viralPotential, smallChannelWin). Remove duplicatas e ordena por score na aba "Dados ordenados".
-
-**Pesos do Score:**
-- Views: 25%, EngagementRate: 20%, OutlierScore: 20%, ViewsPerDay: 15%, LikeRate: 10%, CommentRate: 5%, TotalEngagementRate: 5%
-
-**Tempo:** <1 segundo
+1. [🧩 Visão Geral do Projeto](#-visão-geral-do-projeto)
+2. [⚙️ Arquitetura do Sistema](#️-arquitetura-do-sistema)
+3. [🎯 Parte 1 — Tratamento de Dados](#-parte-1--tratamento-de-dados)
+4. [🔍 Parte 2 — Análise e Identificação de Padrões](#-parte-2--análise-e-identificação-de-padrões)
+5. [💡 Parte 3 — Desenvolvimento de Ideias](#-parte-3--desenvolvimento-de-ideias)
+6. [📊 Estrutura da Planilha (Google Sheets)](#-estrutura-da-planilha-google-sheets)
+7. [🚧 Desafios e Soluções](#-desafios-e-soluções)
+8. [📈 Conclusões e Próximos Passos](#-conclusões-e-próximos-passos)
 
 ---
 
-## 🚧 Dificuldades
+## 🧩 Visão Geral do Projeto
 
-**Principal desafio:** Definir um rankeamento justo com pesos equilibrados que reflitam o que realmente importa no YouTube. Como balancear views (popularidade), engagement (qualidade), outlier score (viralização) e velocidade de crescimento em um único score?
+O sistema foi projetado para **identificar, analisar e gerar ideias de conteúdo viral** com base em dados reais de títulos de vídeos do YouTube.
 
----
+A automação completa é dividida em **3 grandes partes**, que se conectam entre si:
 
-## 🔧 Melhorias Futuras
-
-### 1. **Substituir Apify por Scraper Próprio**
-Actor do Apify é rápido e confiável, mas tem custo. Desenvolver scraper em Python eliminaria custos recorrentes.
-
-### 2. **Multi-idioma Automático**
-Atualmente busca só no idioma do termo pesquisado. Fazer requisições paralelas nos 5 idiomas mais falados (EN, ES, PT, FR, HI) e unificar na base enriqueceria os dados.
-
-### 3. **Banco de Dados Real**
-Google Sheets perde histórico a cada execução. Migrar para Supabase/Baserow permitiria múltiplas pesquisas simultâneas e análise temporal.
-
-### 4. **Pesos Dinâmicos por Nicho**
-Pesos fixos não se adaptam. Nichos diferentes têm prioridades diferentes (entretenimento = viralização, educação = engajamento).
-
-### 5. **Detecção de Outliers com Desvio Padrão**
-O código calcula desvio padrão mas não o usa para detectar outliers estatisticamente. Implementar Z-score ou IQR para identificação mais rigorosa.
+| Parte | Nome | Função Principal |
+|:------:|------|------------------|
+| **1** | **Tratamento de Dados** | Coleta e pré-processamento de títulos para padronização e filtragem inicial. |
+| **2** | **Análise e Identificação de Padrões** | Descoberta de estruturas narrativas e padrões visuais de alta performance. |
+| **3** | **Desenvolvimento de Ideias** | Geração final de ideias, títulos, roteiros e thumbnails a partir das lacunas detectadas. |
 
 ---
 
-## 💡 Vantagem Principal
+## ⚙️ Arquitetura do Sistema
 
-**Benchmarks dinâmicos por nicho.** Cada nicho cria suas próprias referências de sucesso - o que é "viral" em um nicho pode ser mediano em outro. O sistema se adapta automaticamente ao contexto específico da pesquisa.**
+> *(inserir aqui imagem geral dos fluxos das 3 automações)*  
+> 🖼️ **[Espaço reservado para imagem do fluxo completo]**
 
-
-
-# 🧭 Resumo Geral — Automação **Parte 2** (4 passos)
-
-![Fluxo Completo](./Imagens/Fluxointeiro2.jpg)
-
-> Visão macro e encadeamento entre as quatro partes. Mantém o seu padrão (títulos, blocos, limitações, planilhas e pontos de escrita).
+Cada automação é independente, mas compartilha o mesmo **banco de dados no Google Sheets**, permitindo continuidade entre análises e geração de conteúdo.
 
 ---
 
-## 1) 🎯 **Parte 1 — Identificação de Padrões de Performance de Títulos**
+## 🎯 Parte 1 — Tratamento de Dados
 
-**Objetivo**
-Mapear padrões estruturais em títulos com base na planilha **Dados ordenados**.
+📂 **Caminho:**  
+`/Sistema-de-Pesquisa-de-Tend-ncias-para-YouTube/Tratamento de Dados/`
 
-**Fluxo (alto nível)**
+### 📌 Objetivo
 
-```
-Google Sheets Trigger (1 min)
-→ Get row(s) in sheet
-→ Edit Fields (normalizações)
-→ (Caminho TOP) Code (limita 50) → Aggregate → AI Agent (análise positiva) → Edit Fields1
-→ (Caminho OUTRO) Sort → Code (limita 50) → Aggregate1 → AI Agent1 (análise complementar) → Edit Fields2
-→ Merge
-→ Update row in sheet2 (grava padrões de títulos)
-```
+Realizar a coleta e padronização de dados vindos de planilhas, preparando-os para as análises posteriores.  
+Essa etapa inclui filtragem, separação entre títulos de alta e baixa performance e organização de colunas no formato esperado pelos agentes de IA.
 
-**Entrada**
+> *(inserir aqui imagem do fluxo da Parte 1)*  
+> 🖼️ **[Espaço reservado para imagem do fluxo 1]**
 
-* Linhas de **Dados ordenados** (títulos e metadados).
-
-**Processamento**
-
-* Seleção e limitação de amostras (até **50** por caminho).
-* Agentes de IA geram **JSON padronizado** com padrões, power words, elementos formais, diretrizes.
-
-**Saída**
-
-* Padrões consolidados de **títulos** em **Identificação de padrões** (colunas conforme sua estrutura: ex. `TituloPositivo`, `TituloNegativo` ou similar definido por você).
-
-**Limites/Notas**
-
-* Máx. **50** por análise/caminho.
-* **Prompt**: colado manualmente no bloco “📍 Prompt” de cada agente.
+🔗 [Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/README.md)
 
 ---
 
-## 2) 🖼️ **Parte 2 — Análise de Thumbnails & Padrões Visuais**
+## 🔍 Parte 2 — Análise e Identificação de Padrões
 
-**Objetivo**
-Descrever tecnicamente as **thumbnails** dos **50 primeiros registros** e consolidar **padrões visuais**.
+📂 **Caminho:**  
+`/Sistema-de-Pesquisa-de-Tend-ncias-para-YouTube/Análise e Identificação de padrões/`
 
-**Fluxo (alto nível)**
+### 📌 Objetivo
 
-```
-Google Sheets Trigger (1 min)
-→ Get row(s) in sheet1 (Dados ordenados)
-→ Edit Fields3 (mapeia URL da thumb em "")
-→ Code (limita 50)
-→ Loop Over Items2
-   ├─ If (DescriçãoThumb vazia?) → Analyze image → Wait (20s) → Update row in sheet (preenche DescriçãoThumb)
-   └─ (se não, segue)
-→ Aggregate2 → Get row(s) in sheet2 → Edit Fields4
-→ Code1 (limita 50) → Aggregate3 (consolida DescriçãoThumb)
-→ AI Agent2 (padrões visuais a partir das descrições TOP)
-→ Update row in sheet1 (Identificação de padrões!Thumb = output, linha 2)
-```
+Analisar os títulos e thumbnails previamente tratados para descobrir **padrões linguísticos e visuais** de sucesso.  
+O sistema identifica **estruturas narrativas, gatilhos emocionais, power words e composições visuais** recorrentes nos vídeos de melhor performance.
 
-**Entrada**
+> *(inserir aqui imagem do fluxo da Parte 2)*  
+> 🖼️ **[Espaço reservado para imagem do fluxo 2]**
 
-* **Thumb** (URL) e `row_number` dos **50 primeiros** itens.
-
-**Processamento**
-
-* Geração de **DescriçãoThumb** (quando vazia).
-* Consolidação de descrições e extração de **padrões visuais** (cores, composição, texto, elementos de destaque, expressões).
-
-**Saída**
-
-* JSON de **padrões visuais** em **Identificação de padrões → linha 2 → coluna `Thumb`**.
-
-**Limites/Notas**
-
-* Processa **até 50**; só descreve se `DescriçãoThumb` **estiver vazia**.
-* **Prompt** dos nós de IA inserido manualmente (bloco “📍 Prompt”).
+🔗 [Ver documentação completa da Parte 2 →](./Análise%20e%20Identificação%20de%20padrões/README.md)
 
 ---
 
-## 3) 📜 **Parte 3 — Análise de Estrutura e Gatilhos dos Roteiros**
+## 💡 Parte 3 — Desenvolvimento de Ideias
 
-**Objetivo**
-Avaliar **transcrições** dos **50 primeiros** itens para extrair **estrutura narrativa** e **gatilhos de copy**.
+📂 **Caminho:**  
+`/Sistema-de-Pesquisa-de-Tend-ncias-para-YouTube/Desenvolvimento de Ideias/`
 
-**Fluxo (alto nível)**
+### 📌 Objetivo
 
-```
-Google Sheets Trigger (1 min)
-→ Get row(s) in sheet (Dados ordenados)
-→ Edit Fields (transcricao, row_number)
-→ Code (limita 50)
-→ (Loop condicional, se aplicável no seu fluxo)
-→ AI Agent3 (análise por vídeo) → Wait
-→ Update row in sheet (Transcrição = JSON de análise)
-→ Aggregate → Get row(s) → Edit Fields → Code (limita 50)
-→ Aggregate (coleta análises) → AI Agent4 (sumário de padrões narrativos)
-→ Update row in sheet (Identificação de padrões!Roteiro = output, linha 2; Thumb="=")
-```
+Transformar as lacunas e padrões identificados anteriormente em **ideias completas de conteúdo**.  
+Esta automação gera:
+- Ideia central de vídeo  
+- Título otimizado com gatilhos e estrutura testada  
+- Roteiro completo para gravação  
+- Conceitos de thumbnail  
+- Registro automatizado na planilha “Conteúdo”
 
-**Entrada**
+> *(inserir aqui imagem do fluxo da Parte 3)*  
+> 🖼️ **[Espaço reservado para imagem do fluxo 3]**
 
-* `Transcrição` (ou fonte para obtê-la) + `row_number`.
-
-**Processamento**
-
-* Para itens sem análise prévia, gera **análise estruturada** (JSON) por vídeo.
-* Consolida **padrões narrativos** em nível de conjunto.
-
-**Saída**
-
-* JSON de **padrões narrativos** em **Identificação de padrões → linha 2 → coluna `Roteiro`** (e `Thumb = "="` conforme seu fluxo).
-
-**Limites/Notas**
-
-* Máx. **50**; `Transcrição` pode **armazenar a análise JSON** (se quiser preservar o texto bruto, usar outra coluna).
-* **Prompt** colado manualmente.
+🔗 [Ver documentação completa da Parte 3 →](./Desenvolvimento%20de%20Ideias/README.md)
 
 ---
 
-## 4) 🧩 **Parte 4 — Normalização de Oportunidades (n-gramas → lacunas)**
+## 📊 Estrutura da Planilha (Google Sheets)
 
-**Objetivo**
-Transformar **padrões raros-fortes de n-gramas** (extraídos dos títulos da própria base) em **lacunas temáticas** com **score** e **exemplos reais**.
+> *(inserir aqui captura de tela da planilha principal)*  
+> 🖼️ **[Espaço reservado para imagem da planilha do projeto]**
 
-**Fluxo (alto nível)**
+A planilha funciona como **hub central de dados** do sistema.  
+Cada aba representa uma fase do pipeline:
 
-```
-Google Sheets Trigger (1 min)
-→ Get row(s) in sheet (Dados ordenados)
-→ Edit Fields8 (row_number, Titulo, outlierScore)
-→ Code in JavaScript7 (extrai n-gramas 2–3; p75/p90; topK 10% até 50; raridade 2–6)
-→ Aggregate7 (consolida em um item)
-→ AI Agent6 (normaliza em 10 lacunas máx.) [gpt-4o-mini]
-→ Update row in sheet (Identificação de padrões!Lacunas = output, linha 2)
-```
-
-**Entrada**
-
-* `Titulo`/`outlierScore` de **toda a base** lida (o corte de 50 aqui é **para topK**, não para a base).
-
-**Processamento**
-
-* Normalização/tokenização; filtros de **âncoras de domínio** e **ruído**.
-* Seleção de n-gramas **raros (2–6)** e **fortes (≥ p75; prioriza p90+)** com presença em **TOP**.
-* Agente consolida **10 lacunas** (máx.) com **scoreEstimado (60–95)**.
-
-**Saída**
-
-* JSON de **Lacunas** em **Identificação de padrões → linha 2 → coluna `Lacunas`**.
-
-**Limites/Notas**
-
-* Script retorna **até 20 padrões**; o agente reduz para **até 10 lacunas**.
-* **Prompt** do agente colado manualmente.
+| Aba | Função |
+|------|--------|
+| `Dados ordenados` | Armazena todos os títulos com métricas originais. |
+| `Identificação de padrões` | Recebe análises de estrutura, emoção e thumbnail. |
+| `Conteúdo` | Guarda ideias, títulos, roteiros e conceitos finais. |
 
 ---
 
-## 🔗 **Encadeamento e Consumo**
+## 🚧 Desafios e Soluções
 
-* **Parte 1** produz **padrões de títulos** → servem como base para criação/otimização de headlines.
-* **Parte 2** produz **padrões visuais** (a partir de descrições TOP) → dá diretrizes de thumbnail.
-* **Parte 3** produz **padrões narrativos** → orienta estrutura/roteiro e gatilhos de copy.
-* **Parte 4** produz **lacunas temáticas priorizadas** → pauta de conteúdo com maior potencial (junção de força x raridade x presença em TOP).
+Durante o desenvolvimento, alguns desafios técnicos se destacaram:
 
-**Ponto Único de Consulta**
-Tudo converge em **Identificação de padrões (row 2)**, com colunas **Thumb / Roteiro / Lacunas** (e as de títulos conforme sua escolha), padronizando o consumo por qualquer etapa seguinte (ex.: geração de ideias, briefs, roteiros e thumbnails).
+### 1. Limitação de Requisições (Google API)
+> A solução foi implementar **delays automáticos (`Wait 20s`)** e controle de fluxo por lotes.
+
+### 2. Normalização de Dados
+> Foi criado um **script de limpeza e corte de sufixos**, garantindo que nomes de canais ou caudas não interferissem na análise semântica.
+
+### 3. Estruturação de Prompts
+> Cada agente foi desenhado com **prompts em Markdown estruturados** e áreas de preenchimento manual, assegurando reprodutibilidade e clareza.
+
+### 4. Consolidação dos Resultados
+> O uso de **blocos `Aggregate` e scripts `Code` em JavaScript** padronizou o formato JSON e otimizou a gravação de resultados.
 
 ---
 
-Se quiser, eu já transformo esse **Resumo Geral** num bloco final do seu README da **Parte 2**, mantendo seus ícones/estilo e incluindo os **blocos “📍 Prompt”** vazios onde fizer sentido.
+## 📈 Conclusões e Próximos Passos
+
+O projeto demonstra o potencial do uso de **IA aplicada à análise de tendências** e **automação de conteúdo**.  
+Entre os aprendizados mais relevantes estão:
+
+- Criação de fluxos complexos integrados em n8n;  
+- Uso de agentes especializados com contexto controlado;  
+- Estruturação de dados para análises replicáveis;  
+- Engenharia de prompts em formato técnico e padronizado.
+
+### 🚀 Próximos passos
+- Expandir o modelo para outros nichos (ex: saúde, finanças, beleza).  
+- Adicionar etapa de validação automática de performance (CTR simulado).  
+- Conectar o pipeline diretamente à API do YouTube Data v3 para coleta em tempo real.
+
+---
+
+📘 **Autor:** *Guilherme Silva*  
+💼 *Projeto desenvolvido como parte de um processo seletivo técnico em IA aplicada e automação de conteúdo.*
+
+---
