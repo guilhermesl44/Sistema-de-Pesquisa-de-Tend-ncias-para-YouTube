@@ -187,7 +187,7 @@ Agrega **somente `DescriçãoThumb`** para análise do agente.
 Executa análise **sobre as descrições geradas (TOP 50)** e produz **um relatório JSON de padrões visuais** (e anti-padrões, quando inferíveis do próprio conjunto), **sem comparar com “piores”**.
 *Modelo:* `gpt-4.1-mini`. 
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt :**
 
 ```
 <persona>
