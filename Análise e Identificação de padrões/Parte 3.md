@@ -440,11 +440,9 @@ A resposta deve ser um JSON com a seguinte estrutura:
 
 ---
 
-## ⚠️ Observações críticas (pra doc e para o revisor do código)
+## ⚠️ Observações críticas (Ponto de atenção ao usar)
 
-1. **`text` do AI Agent3 aponta para `Link`**, mas a entrada real (via conexão) é a **transcrição**. Sugestão: ajustar `text` para ler explicitamente a transcrição do nó anterior e evitar ambiguidade. 
-2. **Campo `Transcrição` é sobrescrito** com a **análise JSON**. Se você precisa guardar a transcrição “crua”, crie uma coluna dedicada (ex.: `TranscriçãoOriginal`). 
-3. **AI Agent4 espera Top vs Bottom**, mas **não há split** sendo criado no fluxo. Se o objetivo é comparar, inclua um passo de **classificação** (ex.: por `outlierScore` ou `Classificação`) e gere o payload nos moldes do `<formato_input>` do prompt (duas listas). **Nesta doc, descrevi o que o código realmente faz** (consolidação a partir de lista única). 
+1. **Campo `Transcrição` é sobrescrito** com a **análise JSON**. Se você precisa guardar a transcrição “crua”, crie uma coluna dedicada (ex.: `TranscriçãoOriginal`). 
 
 ---
 
