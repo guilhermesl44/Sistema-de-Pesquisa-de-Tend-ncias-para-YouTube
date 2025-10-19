@@ -31,41 +31,42 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 
 ```mermaid
 flowchart LR
-    subgraph P1[Parte 1 — Tratamento de Dados]
-      A1[Trigger / API]
-      A2[Normalização & Limpeza]
-      A3[Ranking / Outlier & Sort]
-      A4[[Sheets: Dados ordenados]]
-      A1 --> A2 --> A3 --> A4
-    end
+  %% ------------------- Parte 1 -------------------
+  subgraph P1["Parte 1 - Tratamento de Dados"]
+    A1["Trigger / API"]
+    A2["Normalizacao e Limpeza"]
+    A3["Ranking / Outlier & Sort"]
+    A4[["Sheets: Dados ordenados"]]
+    A1 --> A2 --> A3 --> A4
+  end
 
-    subgraph P2[Parte 2 — Análise & Identificação de Padrões]
-      direction LR
-      B1[Seq.1 — Benchmark de Títulos (TOP)]
-      B2[Seq.2 — Thumbnails: Descrição & Padrões]
-      B3[Seq.3 — Otimização & Avaliação de Títulos]
-      B4[Seq.4 — Lacunas Temáticas (n-gramas)]
-      S2[[Sheets: IDentificação de padrões]]
-      A4 --> B1
-      A4 --> B2
-      A4 --> B3
-      A4 --> B4 --> S2
-      B2 --> S2
-      B3 --> S2
-    end
+  %% ------------------- Parte 2 -------------------
+  subgraph P2["Parte 2 - Analise e Identificacao de Padroes"]
+    direction LR
+    B1["Seq.1 - Benchmark de Titulos (TOP)"]
+    B2["Seq.2 - Thumbnails: Descricao e Padroes"]
+    B3["Seq.3 - Otimizacao e Avaliacao de Titulos"]
+    B4["Seq.4 - Lacunas Tematicas (n-gramas)"]
+    S2[["Sheets: Identificacao de padroes"]]
+    A4 --> B1
+    A4 --> B2
+    A4 --> B3
+    A4 --> B4 --> S2
+    B2 --> S2
+    B3 --> S2
+  end
 
-    subgraph P3[Parte 3 — Desenvolvimento de Ideias (Geração Final)]
-      direction LR
-      C0[[Sheets: Conteúdos (histórico)]]
-      C1[Ideias de Vídeo]
-      C2[Deduplicação<br/>(Sheets Conteúdos)]
-      C3[Títulos Otimizados]
-      C4[Conceitos de Thumbnail]
-      C5[Roteiro]
-      C6[[Sheets: Conteúdos (append)]]
-      S2 --> C1 --> C2 --> C3 --> C4 --> C5 --> C6
-      C0 -. consulta/evita repetição .- C2
-    end
+  %% ------------------- Parte 3 -------------------
+  subgraph P3["Parte 3 - Desenvolvimento de Ideias (Geracao Final)"]
+    direction LR
+    C0[["Sheets: Conteudos (historico)"]]
+    C1["Ideias de Video"]
+    C2["Deduplicacao / Sheets Conteudos"]
+    C3["Titulos Otimizados"]
+    C4["Conceitos de Thumbnail"]
+    C5["Roteiro"]
+    C6[["Sheets: Conteudos (append)"]]
+    S2 --> C1
 
 ```
 
