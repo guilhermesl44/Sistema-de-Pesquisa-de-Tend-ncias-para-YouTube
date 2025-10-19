@@ -29,9 +29,10 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 | **2** | **Análise e Identificação de Padrões** | Descoberta de estruturas narrativas e padrões visuais de alta performance. |
 | **3** | **Desenvolvimento de Ideias** | Geração final de ideias, títulos, roteiros e thumbnails a partir das lacunas detectadas. |
 
+```mermaid
 flowchart LR
     subgraph P1[Parte 1 — Tratamento de Dados]
-      A1[Trigger / API<br/>(Raspagem ou Última Raspagem)]
+      A1[Trigger / API]
       A2[Normalização & Limpeza]
       A3[Ranking / Outlier & Sort]
       A4[[Sheets: Dados ordenados]]
@@ -66,6 +67,7 @@ flowchart LR
       C0 -. consulta/evita repetição .- C2
     end
 
+```
 
 ---
 
@@ -89,8 +91,7 @@ Essa etapa inclui filtragem, separação entre títulos de alta e baixa performa
 > 🖼️ 
 ![Fluxo Completo](./Imagens/Fluxointeiro.jpg) 
 
-🔗 [Ver documentação completa da Parte 1 →](/An%C3%A1lise%20e%20Identifica%C3%A7%C3%A3o%20de%20padr%C3%B5es/)
-
+[Ver documentação completa da Parte 1 →](./Tratamento%20de%20Dados/)
 
 ---
 
