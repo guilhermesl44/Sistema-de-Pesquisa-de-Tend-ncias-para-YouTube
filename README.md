@@ -31,46 +31,59 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 
 ```mermaid
 flowchart LR
-  %% Nós compartilhados entre partes
+  %% nós compartilhados
   A4["Sheets: Dados ordenados"]
   S2["Sheets: Identificacao de padroes"]
   C0["Sheets: Conteudos (historico)"]
   C6["Sheets: Conteudos (append)"]
 
-  %% ------------------- Parte 1 -------------------
+  %% Parte 1
   subgraph P1["Parte 1 - Tratamento de Dados"]
-    A1["Trigger / API"]
-    A2["Normalizacao e Limpeza"]
-    A3["Ranking / Outlier & Sort"]
+    A1["HTTP Request: Raspagem (ou Ultima Raspagem)"]
+    A2["Normalizacao & Limpeza"]
+    A3["Ranking / Outlier / Sort"]
     A1 --> A2 --> A3 --> A4
   end
 
-  %% ------------------- Parte 2 -------------------
-  subgraph P2["Parte 2 - Analise e Identificacao de Padroes"]
+  %% Parte 2
+  subgraph P2["Parte 2 - Analise & Identificacao de Padroes"]
     direction LR
     B1["Seq.1 - Benchmark de Titulos (TOP)"]
-    B2["Seq.2 - Thumbnails: Descricao e Padroes"]
-    B3["Seq.3 - Otimizacao e Avaliacao de Titulos"]
-    B4["Seq.4 - Lacunas Tematicas (n-gramas)"]
-    A4 --> B1
-    A4 --> B2
-    A4 --> B3
+    B21["Seq.2 - Thumbs: Mapear URL ('')"]
+    B22["Limitar a 50"]
+    B23["Loop 50 itens"]
+    B24{"DescricaoThumb vazia?"}
+    B25["Analyze Image (gera descricao)"]
+    B26["Wait 20s"]
+    B27["Update row (grava DescricaoThumb)"]
+    B28["Aggregate descricoes"]
+    B29["AI: Padroes Visuais a partir das descricoes"]
+
+    B3["Seq.3 - Titulos Otimizados + Avaliacao"]
+    B4["Seq.4 - N-gramas raros-fortes (Code) + Normalizador de Oportunidades (AI)"]
+
+    %% ligações
+    A4 --> B1 --> S2
+    A4 --> B21 --> B22 --> B23 --> B24
+    B24 -- "Sim" --> B25 --> B26 --> B27 --> B23
+    B24 -- "Nao" --> B23
+    B23 --> B28 --> B29 --> S2
+    A4 --> B3 --> S2
     A4 --> B4 --> S2
-    B2 --> S2
-    B3 --> S2
   end
 
-  %% ------------------- Parte 3 -------------------
+  %% Parte 3
   subgraph P3["Parte 3 - Desenvolvimento de Ideias (Geracao Final)"]
     direction LR
-    C1["Ideias de Video"]
-    C2["Deduplicacao / Sheets Conteudos"]
-    C3["Titulos Otimizados"]
-    C4["Conceitos de Thumbnail"]
-    C5["Roteiro"]
+    C1["AI: Ideias a partir das 'Lacunas'"]
+    C2["Deduplicacao: checa Conteudos (tool/lookup)"]
+    C3["AI: Titulos Otimizados"]
+    C4["AI: Conceitos de Thumbnail"]
+    C5["AI: Roteiro"]
     S2 --> C1 --> C2 --> C3 --> C4 --> C5 --> C6
-    C0 -. consulta/evita repeticao .- C2
+    C0 -. "consulta/evita repeticao" .- C2
   end
+
 
 
 ```
