@@ -31,48 +31,43 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 
 ```mermaid
 flowchart LR
-  %% fontes/destinos compartilhados
-  SRC["Sheets: Dados ordenados"]
-  PADROES["Sheets: Identificacao de padroes"]
+  %% fontes/destinos principais
+  A["Sheets: Dados ordenados"]
+  P["Sheets: Identificacao de padroes"]
+  H["Sheets: Conteudos (historico)"]
+  OUT["Sheets: Conteudos (append)"]
 
-  %% ----------------- Seq.1 -----------------
-  subgraph S1["Seq.1 - Titulos: Padroes de Performance (TOP)"]
-    S1A["Seleciona TOP por outlierScore"]
-    S1B["AI: Padroes estruturais / recorrencias"]
-    SRC --> S1A --> S1B --> PADROES
+  %% -------- Parte 1 --------
+  subgraph Parte1["Parte 1 - Tratamento de Dados"]
+    T1["HTTP Request: raspagem/ultima"]
+    T2["Normalizacao & limpeza"]
+    T3["Ranking / outlier / sort"]
+    T1 --> T2 --> T3 --> A
   end
 
-  %% ----------------- Seq.2 -----------------
-  subgraph S2["Seq.2 - Thumbnails: Analise & Padroes Visuais"]
-    direction LR
-    T1["Mapear URL para chave '' + row_number"]
-    T2["Code: limitar a 50"]
-    T3["Loop 50 itens"]
-    T4{"DescricaoThumb vazia?"}
-    T5["Analyze Image (gera descricao)"]
-    T6["Wait 20s"]
-    T7["Update row: grava DescricaoThumb"]
-    T8["Aggregate descricoes"]
-    T9["AI: Padroes Visuais a partir das descricoes"]
-    SRC --> T1 --> T2 --> T3 --> T4
-    T4 -- "Sim" --> T5 --> T6 --> T7 --> T3
-    T4 -- "Nao" --> T3
-    T3 --> T8 --> T9 --> PADROES
+  %% -------- Parte 2 (4 sequencias) --------
+  subgraph Parte2["Parte 2 - Analise & Identificacao de Padroes"]
+    S1["Seq.1: Titulos - padroes de performance (TOP)"]
+    S2["Seq.2: Thumbnails - padroes visuais"]
+    S3["Seq.3: Roteiros - estrutura & gatilhos"]
+    S4["Seq.4: N-gramas -> lacunas tematicas"]
+    A --> S1 --> P
+    A --> S2 --> P
+    A --> S3 --> P
+    A --> S4 --> P
   end
 
-  %% ----------------- Seq.3 -----------------
-  subgraph S3["Seq.3 - Roteiros: Analise de Estrutura e Gatilhos"]
-    R1["Coleta textos de roteiro (fonte planilha)"]
-    R2["AI: detectar estrutura, gatilhos, elementos narrativos"]
-    SRC --> R1 --> R2 --> PADROES
+  %% -------- Parte 3 --------
+  subgraph Parte3["Parte 3 - Desenvolvimento de Ideias"]
+    I["Ideias (a partir das lacunas)"]
+    D["Deduplicacao (consulta historico)"]
+    TT["Titulos otimizados"]
+    TH["Conceitos de thumbnail"]
+    R["Roteiro"]
+    P --> I --> D --> TT --> TH --> R --> OUT
+    H -. evita repeticao .- D
   end
 
-  %% ----------------- Seq.4 -----------------
-  subgraph S4["Seq.4 - Normalizacao de Oportunidades (n-gramas -> lacunas)"]
-    N1["Code: n-gramas raros-fortes"]
-    N2["AI: Normalizador de Oportunidades (lacunas tematicas)"]
-    SRC --> N1 --> N2 --> PADROES
-  end
 
 ```
 
