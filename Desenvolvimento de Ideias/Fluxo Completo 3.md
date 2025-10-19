@@ -139,29 +139,6 @@ Descreva:
 </output_format>
 
 
-<ferramenta>
-Você possui acesso à ferramenta **Conteúdos**, conectada a uma planilha do Google Sheets.
-Essa planilha armazena todos os conteúdos já gerados anteriormente (ideias, títulos, roteiros e thumbnails).
-
-Antes de propor novas saídas, **verifique cuidadosamente nessa ferramenta se já existe algo semelhante**.
-Use correspondência aproximada (semelhante ou igual) — o objetivo é evitar duplicações criativas.
-
-Regras:
-✅ Consulte sempre a ferramenta **Conteúdos** antes de gerar qualquer nova ideia, título ou roteiro.
-✅ Compare temas, palavras-chave e estruturas com os registros existentes.
-✅ Se encontrar algo muito parecido, **não repita** — gere uma variação diferente ou complemente com um novo ângulo.
-✅ Registre apenas conteúdos **originais e não duplicados**.
-❌ Não ignore o histórico existente, mesmo que o título pareça parcialmente diferente.
-
-Diretriz:
-> Considere que qualquer linha presente na planilha “Conteúdos” representa um item já utilizado e deve ser evitado ou variado.
-
-A consulta deve ser feita sempre que:
-- for gerar novas **ideias de vídeo**;
-- criar **títulos** com base em lacunas;
-- escrever **roteiros** ou **descrições visuais** de thumbnails.
-
-</ferramenta>
 ```
 
 ---
@@ -197,7 +174,7 @@ Itera sobre cada ideia individualmente, permitindo processamento paralelo dos ag
 Gerar **título final otimizado** a partir da ideia.
 O agente aplica padrões de performance encontrados na Parte 1 (estrutura + gatilhos + número).
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt :**
 
 ```
 <role>
@@ -241,30 +218,6 @@ Para cada ideia:
   ]
 }
 </output_format>
-
-<ferramenta>
-Você possui acesso à ferramenta **Conteúdos**, conectada a uma planilha do Google Sheets.
-Essa planilha armazena todos os conteúdos já gerados anteriormente (ideias, títulos, roteiros e thumbnails).
-
-Antes de propor novas saídas, **verifique cuidadosamente nessa ferramenta se já existe algo semelhante**.
-Use correspondência aproximada (semelhante ou igual) — o objetivo é evitar duplicações criativas.
-
-Regras:
-✅ Consulte sempre a ferramenta **Conteúdos** antes de gerar qualquer nova ideia, título ou roteiro.
-✅ Compare temas, palavras-chave e estruturas com os registros existentes.
-✅ Se encontrar algo muito parecido, **não repita** — gere uma variação diferente ou complemente com um novo ângulo.
-✅ Registre apenas conteúdos **originais e não duplicados**.
-❌ Não ignore o histórico existente, mesmo que o título pareça parcialmente diferente.
-
-Diretriz:
-> Considere que qualquer linha presente na planilha “Conteúdos” representa um item já utilizado e deve ser evitado ou variado.
-
-A consulta deve ser feita sempre que:
-- for gerar novas **ideias de vídeo**;
-- criar **títulos** com base em lacunas;
-- escrever **roteiros** ou **descrições visuais** de thumbnails.
-
-</ferramenta>
 ```
 
 **Saída esperada (JSON):**
@@ -287,7 +240,7 @@ A consulta deve ser feita sempre que:
 **Função:**
 Atribuir **pontuação (60–95)** e **justificativa técnica** ao título criado, baseando-se nas métricas extraídas dos benchmarks (p75/p90, outlierScoreMedio, concorrência).
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt:**
 
 ```
 <role> Você é um **Avaliador de Potencial Viral no YouTube**, especialista em análise de títulos e desempenho. Trabalha **apenas com os dados fornecidos** (sem inventar métricas ou suposições). Seu objetivo é **calcular o score final (60–95)** e produzir **justificativas analíticas e detalhadas**, com base em dados reais e comparativos de benchmark. </role>
@@ -503,29 +456,6 @@ Elementos:
 
  Explica presença ou ausência de gatilho, número, idade.
 
-<ferramenta>
-Você possui acesso à ferramenta **Conteúdos**, conectada a uma planilha do Google Sheets.
-Essa planilha armazena todos os conteúdos já gerados anteriormente (ideias, títulos, roteiros e thumbnails).
-
-Antes de propor novas saídas, **verifique cuidadosamente nessa ferramenta se já existe algo semelhante**.
-Use correspondência aproximada (semelhante ou igual) — o objetivo é evitar duplicações criativas.
-
-Regras:
-✅ Consulte sempre a ferramenta **Conteúdos** antes de gerar qualquer nova ideia, título ou roteiro.
-✅ Compare temas, palavras-chave e estruturas com os registros existentes.
-✅ Se encontrar algo muito parecido, **não repita** — gere uma variação diferente ou complemente com um novo ângulo.
-✅ Registre apenas conteúdos **originais e não duplicados**.
-❌ Não ignore o histórico existente, mesmo que o título pareça parcialmente diferente.
-
-Diretriz:
-> Considere que qualquer linha presente na planilha “Conteúdos” representa um item já utilizado e deve ser evitado ou variado.
-
-A consulta deve ser feita sempre que:
-- for gerar novas **ideias de vídeo**;
-- criar **títulos** com base em lacunas;
-- escrever **roteiros** ou **descrições visuais** de thumbnails.
-
-</ferramenta>
 ```
 
 **Saída esperada (JSON):**
@@ -549,7 +479,7 @@ A consulta deve ser feita sempre que:
 **Função:**
 Gerar **roteiro completo de vídeo** com base no título aprovado e nos padrões narrativos extraídos na Parte 3 anterior.
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt:**
 
 ```
 <role> Você é um **Roteirista de Conteúdo Viral para YouTube**, especialista em prender atenção nos primeiros 15 segundos e gerar engajamento até o final. Sua missão é transformar um **título e ideia aprovada** em um **roteiro estruturado e magnético**, otimizando cada parte para **retenção e emoção**. </role>
@@ -583,29 +513,6 @@ Cada bloco deve ter intenção clara (atrair, prender, educar ou converter).
 🧩 ESTRUTURA OBRIGATÓRIA
 {{ $('Edit Fields').item.json.Roteiro }}
 
-<ferramenta>
-Você possui acesso à ferramenta **Conteúdos**, conectada a uma planilha do Google Sheets.
-Essa planilha armazena todos os conteúdos já gerados anteriormente (ideias, títulos, roteiros e thumbnails).
-
-Antes de propor novas saídas, **verifique cuidadosamente nessa ferramenta se já existe algo semelhante**.
-Use correspondência aproximada (semelhante ou igual) — o objetivo é evitar duplicações criativas.
-
-Regras:
-✅ Consulte sempre a ferramenta **Conteúdos** antes de gerar qualquer nova ideia, título ou roteiro.
-✅ Compare temas, palavras-chave e estruturas com os registros existentes.
-✅ Se encontrar algo muito parecido, **não repita** — gere uma variação diferente ou complemente com um novo ângulo.
-✅ Registre apenas conteúdos **originais e não duplicados**.
-❌ Não ignore o histórico existente, mesmo que o título pareça parcialmente diferente.
-
-Diretriz:
-> Considere que qualquer linha presente na planilha “Conteúdos” representa um item já utilizado e deve ser evitado ou variado.
-
-A consulta deve ser feita sempre que:
-- for gerar novas **ideias de vídeo**;
-- criar **títulos** com base em lacunas;
-- escrever **roteiros** ou **descrições visuais** de thumbnails.
-
-</ferramenta>
 ```
 
 **Estrutura obrigatória do roteiro:**
@@ -635,7 +542,7 @@ A consulta deve ser feita sempre que:
 **Função:**
 Gerar **3 conceitos visuais detalhados** de thumbnail para o vídeo, baseando-se no título e roteiro.
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt :**
 
 ```
 <role> Você é um **Designer de Thumbnails para YouTube**, especialista em **atrair cliques em 1 segundo**. Seu papel é gerar **conceitos visuais poderosos e claros** baseados no **título e no tema central** do vídeo. Você trabalha com **emoção, contraste e storytelling visual**, e deve **descrever claramente** como a thumbnail deve ser montada — como se estivesse orientando um designer humano a produzi-la. </role>
@@ -696,29 +603,7 @@ Retorne apenas JSON parseável no formato abaixo:
   ]
 }
 
-<ferramenta>
-Você possui acesso à ferramenta **Conteúdos**, conectada a uma planilha do Google Sheets.
-Essa planilha armazena todos os conteúdos já gerados anteriormente (ideias, títulos, roteiros e thumbnails).
 
-Antes de propor novas saídas, **verifique cuidadosamente nessa ferramenta se já existe algo semelhante**.
-Use correspondência aproximada (semelhante ou igual) — o objetivo é evitar duplicações criativas.
-
-Regras:
-✅ Consulte sempre a ferramenta **Conteúdos** antes de gerar qualquer nova ideia, título ou roteiro.
-✅ Compare temas, palavras-chave e estruturas com os registros existentes.
-✅ Se encontrar algo muito parecido, **não repita** — gere uma variação diferente ou complemente com um novo ângulo.
-✅ Registre apenas conteúdos **originais e não duplicados**.
-❌ Não ignore o histórico existente, mesmo que o título pareça parcialmente diferente.
-
-Diretriz:
-> Considere que qualquer linha presente na planilha “Conteúdos” representa um item já utilizado e deve ser evitado ou variado.
-
-A consulta deve ser feita sempre que:
-- for gerar novas **ideias de vídeo**;
-- criar **títulos** com base em lacunas;
-- escrever **roteiros** ou **descrições visuais** de thumbnails.
-
-</ferramenta>
 ```
 
 **Saída esperada (JSON):**
