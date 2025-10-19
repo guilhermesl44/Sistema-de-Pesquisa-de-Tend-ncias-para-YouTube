@@ -128,7 +128,7 @@ Garante que **somente os 50 primeiros** sigam no fluxo.
 * **Entrada efetiva:** **fluxo do nó anterior** (transcrição completa)
 * **Observação importante:** no node, o campo `text` está configurado como `={{ $('Loop Over Items').item.json.Link }}`. Apesar disso, **a transcrição chega via conexão do nó anterior** e é o conteúdo analisado. Se você quiser “blindar” isso, altere o `text` para ler explicitamente a transcrição recebida. 
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt:**
 
 ```
 # 🎯 Função
@@ -316,7 +316,7 @@ Esses passos preparam um **lote de até 50 análises** (já salvas em `Transcri�
 * **Entrada real:** a **lista agregada** de `Transcrição` (ou seja, **as análises estruturais produzidas pelo AI Agent3**).
 * **Importante (inconsistência atual do prompt vs entrada):** O prompt do AI Agent4 instrui a comparar **Top** vs **Bottom** e prevê um **formato de input** com duas listas (`top_roteiros` e `bottom_roteiros`). **O fluxo, como está, NÃO constrói nem fornece esse split**; ele passa **uma lista única** de `Transcrição` agregada. Se você quiser realmente um comparativo Top/Bottom, será preciso **criar ramos** ou **pré-agregar dois grupos** antes de chamar o AI Agent4. Documentação aqui reflete o que o **código faz de fato**. 
 
-📍 **Prompt (preencher manualmente):**
+📍 **Prompt :**
 
 ```
 <persona>
