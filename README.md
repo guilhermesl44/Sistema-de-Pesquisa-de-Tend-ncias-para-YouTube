@@ -31,12 +31,17 @@ A automação completa é dividida em **3 grandes partes**, que se conectam entr
 
 ```mermaid
 flowchart LR
+  %% Nós compartilhados entre partes
+  A4["Sheets: Dados ordenados"]
+  S2["Sheets: Identificacao de padroes"]
+  C0["Sheets: Conteudos (historico)"]
+  C6["Sheets: Conteudos (append)"]
+
   %% ------------------- Parte 1 -------------------
   subgraph P1["Parte 1 - Tratamento de Dados"]
     A1["Trigger / API"]
     A2["Normalizacao e Limpeza"]
     A3["Ranking / Outlier & Sort"]
-    A4[["Sheets: Dados ordenados"]]
     A1 --> A2 --> A3 --> A4
   end
 
@@ -47,7 +52,6 @@ flowchart LR
     B2["Seq.2 - Thumbnails: Descricao e Padroes"]
     B3["Seq.3 - Otimizacao e Avaliacao de Titulos"]
     B4["Seq.4 - Lacunas Tematicas (n-gramas)"]
-    S2[["Sheets: Identificacao de padroes"]]
     A4 --> B1
     A4 --> B2
     A4 --> B3
@@ -59,14 +63,15 @@ flowchart LR
   %% ------------------- Parte 3 -------------------
   subgraph P3["Parte 3 - Desenvolvimento de Ideias (Geracao Final)"]
     direction LR
-    C0[["Sheets: Conteudos (historico)"]]
     C1["Ideias de Video"]
     C2["Deduplicacao / Sheets Conteudos"]
     C3["Titulos Otimizados"]
     C4["Conceitos de Thumbnail"]
     C5["Roteiro"]
-    C6[["Sheets: Conteudos (append)"]]
-    S2 --> C1
+    S2 --> C1 --> C2 --> C3 --> C4 --> C5 --> C6
+    C0 -. consulta/evita repeticao .- C2
+  end
+
 
 ```
 
