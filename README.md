@@ -1,6 +1,6 @@
 # 🧠 Sistema de Pesquisa de Tendências para YouTube
 
-> Projeto desenvolvido como parte de um processo seletivo técnico, com o objetivo de demonstrar domínio em automação de fluxos com **n8n**, integração com **Google Sheets**, uso de **IA generativa**, e aplicação prática de **engenharia de prompts**.
+> Projeto desenvolvido como parte de um processo seletivo técnico, com o objetivo de demonstrar domínio em automação de fluxos com **n8n**, Raspagem de dados **Youtube**, uso de **IA generativa**, e aplicação prática de **engenharia de prompts**.
 
 ---
 
