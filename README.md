@@ -15,6 +15,10 @@
 7. [🚧 Desafios e Soluções](#-desafios-e-soluções)
 8. [📈 Conclusões e Próximos Passos](#-conclusões-e-próximos-passos)
 
+🎥 **Assista à demonstração completa:**  
+[▶️ Ver vídeo no YouTube](https://www.youtube.com/watch?v=bBC6FLSMeck)
+
+
 ---
 
 ## 🧩 Visão Geral do Projeto
